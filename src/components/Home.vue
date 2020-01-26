@@ -43,22 +43,38 @@
           <div class="col-12 text-center">
             <h1 class="font-weight-light">Welcome to sharecopy</h1>
             <p class="lead">Copy and share your content online</p>
-            <a
-              href="sharecopy.html"
+            <router-link
               class="btn btn-primary btn-lg btn-block"
-              type="submit"
-            >Start Sharing</a>
+              to="/clipboard"
+              tag="button">Shareclipboard</router-link>
+
             <br />
             <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Your Access Word" v-model="access" />
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Your Access Word"
+                v-model="access"
+              />
               <div class="input-group-append">
-                <button class="btn btn-success   btn-block" type="submit" @click="validate()">View Shared Clipboard</button>
+                 <router-link
+             class="btn btn-success btn-block"
+              :to="{name:'clipboard',params:{access:access}}"
+              tag="button">View Shared Clipboard</router-link>
+
+               <!--  <button
+                  class="btn btn-success btn-block"
+                  type="submit"
+                  @click="validate()"
+                >View Shared Clipboard</button> -->
               </div>
             </div>
-             <b-toast id="example-toast" title="Sharecopy" static no-auto-hide>
-      Provide Access Code Before Proceeding.
-    </b-toast>
-
+            <b-toast
+              id="example-toast"
+              title="Sharecopy"
+              static
+              no-auto-hide
+            >Provide Access Code Before Proceeding.</b-toast>
           </div>
         </div>
       </div>
@@ -69,33 +85,32 @@
 <script>
 export default {
   name: "home",
-   data()
-  {
+  data() {
     return {
-      httpurl:'',
-      access:''
-       }
-  },methods:
-  {
-    validate:function()
-    {
-        if(this.access === '')
-        {
-          //  this.$bvToast.show('example-toast');
-       this.message('b-toaster-bottom-full danger','Please Provide Access Code', true)
-        }
-       
-     
-    },
-      message(toaster,body, append = false) {
-        this.counter++
-        this.$bvToast.toast(body, {
-          title: 'Sharecopy',
-          toaster: toaster,
-          solid: true,
-          appendToast: append
-        })
+      httpurl: "",
+      access: ""
+    };
+  },
+  methods: {
+    validate: function() {
+      if (this.access === "") {
+        //  this.$bvToast.show('example-toast');
+        this.message(
+          "b-toaster-bottom-full danger",
+          "Please Provide Access Code",
+          true
+        );
       }
+    },
+    message(toaster, body, append = false) {
+      this.counter++;
+      this.$bvToast.toast(body, {
+        title: "Sharecopy",
+        toaster: toaster,
+        solid: true,
+        appendToast: append
+      });
+    }
   }
 };
 </script>

@@ -1,18 +1,19 @@
 <template>
   <div id="app">
-    <home></home>
+    <router-view></router-view>
+   
   </div>
 </template>
 
 <script> 
 //import Sharecopy from './components/Sharecopy.vue'
-import Home from './components/Home.vue'
+//import Home from './components/Home.vue'
 
 export default {
-  name: 'app',
-  components: {
+ // name: 'app',
+ /* components: {
     Home
-  }
+  }*/
 }
 </script>
 
