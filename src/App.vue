@@ -1,16 +1,17 @@
 <template>
   <div id="app">
-    <Sharecopy></Sharecopy>
+    <home></home>
   </div>
 </template>
 
 <script> 
-import Sharecopy from './components/Sharecopy.vue'
+//import Sharecopy from './components/Sharecopy.vue'
+import Home from './components/Home.vue'
 
 export default {
   name: 'app',
   components: {
-    Sharecopy
+    Home
   }
 }
 </script>
