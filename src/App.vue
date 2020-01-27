@@ -7,6 +7,7 @@
 
 <script> 
 //import Sharecopy from './components/Sharecopy.vue'
+
 //import Home from './components/Home.vue'
 
 export default {
