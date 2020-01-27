@@ -27,8 +27,6 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Premium</a>
-               <b-modal id="modal-1" title="Premium">
-              
             </li>
 
             <li class="nav-item">
