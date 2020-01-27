@@ -27,15 +27,25 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Premium</a>
+               <b-modal id="modal-1" title="Premium">
+              
             </li>
 
             <li class="nav-item">
-              <a class="nav-link" href="#">Contact</a>
+              <b-link  class="nav-link" v-b-modal.modal-1>Contact us</b-link>
+            
+             <!-- <a class="nav-link" href="#" v-b-modal.modal-1>Contact</a>
+              -->
+              <b-modal id="modal-1" title="Contact">
+               <p class="my-4">Email : 94apps.io@gmail.com</p>
+               </b-modal>
             </li>
+
           </ul>
         </div>
       </div>
     </nav>
+    
 
     <header class="masthead">
       <div class="container h-100">
