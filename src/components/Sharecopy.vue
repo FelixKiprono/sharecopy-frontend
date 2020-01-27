@@ -37,23 +37,25 @@
     <div class="container-fluid">
       <div class="panel panel-default">
         <div class="panel-heading">
-            
+              <h4>Your Clipboard can be accessed with this AccessNumber :  
+                             <span class="badge badge-secondary">{{accessnumber}}</span></h4>
+     
          <div class="form-group">
             <b-button variant="outline-primary"  @click=" clearclipboard()">New</b-button>
             <b-button variant="outline-primary"  @click=" saveclipboard()">Save</b-button>
-          </div> 
-            
+          </div>
+           
          
         </div>
         <br>
         <div class="form-group">
-          <label for="title">Clipboard Title:</label>
+          <label for="title">Clipboard Title (<i>optional</i>):</label>
           <input type="text" class="form-control" id="title" v-model="title" />
         </div>
         <div class="form-group">
           <div class="panel-body">
             <label for="comment">Clipboard</label>
-            <textarea class="form-control" rows="15" id="notes" v-model="notes"></textarea>
+            <textarea class="form-control" rows="13" id="notes" v-model="notes"></textarea>
           </div>
         </div>
       </div>
@@ -68,6 +70,7 @@ export default {
     return {
       livehttpurl:'https://api.sharecopy.greenbyte.systems/',
       idnumber:0,
+      accessnumber:0,
       word:'',
       userid:'1',
       httpurl: "",
@@ -94,6 +97,8 @@ export default {
   {
     initfunc: function()
     {
+       this.accessnumber =  Math.floor(Math.random() * 100000);
+    
       //get word as a parameter
       var word = null;
       if(this.$route.params.access!=null)
@@ -151,14 +156,14 @@ clearclipboard:function()
     },
     saveclipboard: function()
     {
-      var accessnumber =  Math.floor(Math.random() * 100);
+      //var accessnumber =  Math.floor(Math.random() * 100);
       var jsonheader = { headers: { "Content-Type": "application/json" } };
       var postdata =
       {
         'userid':this.userid,
         'title':this.title,
         'notes':this.notes,
-        'access':accessnumber
+        'access':this.accessnumber
       }
        this.$http
         .post(this.livehttpurl+"api/newclipboard", postdata,jsonheader)

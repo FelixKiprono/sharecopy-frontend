@@ -45,8 +45,8 @@
             <p class="lead">Copy and share your content online</p>
             <router-link
               class="btn btn-primary btn-lg btn-block"
-              to="/clipboard"
-              tag="button">Shareclipboard</router-link>
+              to="/clipboard/0"
+              tag="button">Start Sharing clipboard</router-link>
 
             <br />
             <div class="input-group mb-3">
