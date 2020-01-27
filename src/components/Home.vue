@@ -5,7 +5,9 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
       <div class="container">
-        <a class="navbar-brand" href="#">Sharecopy</a>
+        <!-- <img src="../../public/logo.png">
+         -->
+        <a class="navbar-brand" href="#"> <h1 class="font-weight-light">Sharecopy </h1></a>
         <button
           class="navbar-toggler"
           type="button"
