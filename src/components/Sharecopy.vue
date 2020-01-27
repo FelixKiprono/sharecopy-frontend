@@ -67,7 +67,8 @@ export default {
   data() {
     return {
       livehttpurl:'https://api.sharecopy.greenbyte.systems/',
-       word:'',
+      idnumber:0,
+      word:'',
       userid:'1',
       httpurl: "",
       info: "",
@@ -150,12 +151,14 @@ clearclipboard:function()
     },
     saveclipboard: function()
     {
+      var accessnumber =  Math.floor(Math.random() * 100);
       var jsonheader = { headers: { "Content-Type": "application/json" } };
       var postdata =
       {
         'userid':this.userid,
         'title':this.title,
-        'notes':this.notes
+        'notes':this.notes,
+        'access':accessnumber
       }
        this.$http
         .post(this.livehttpurl+"api/newclipboard", postdata,jsonheader)
