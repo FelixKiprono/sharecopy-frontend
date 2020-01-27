@@ -108,7 +108,7 @@ export default {
       var jsonheader = { headers: { "Content-Type": "application/json" } };
       
       this.$http
-        .get("http://localhost:8000/api/myclipboard", {params:{'access':word}},jsonheader)
+        .get("https://api.sharecopy.greenbyte.systems/api/myclipboard", {params:{'access':word}},jsonheader)
         .then(response => 
         {
           //window.console.log(response.name);
@@ -155,8 +155,9 @@ clearclipboard:function()
         'title':this.title,
         'notes':this.notes
       }
+      //https://api.sharecopy.greenbyte.systems/
       this.$http
-        .post("http://localhost:8000/api/newclipboard", postdata,jsonheader)
+        .post("https://api.sharecopy.greenbyte.systems/api/newclipboard", postdata,jsonheader)
         .then(response => 
         {
           this.makeToast();
@@ -167,7 +168,7 @@ clearclipboard:function()
     fetchnotes: function() {
       var jsonheader = { headers: { "Content-Type": "application/json" } };
       this.$http
-        .get("http://localhost:8000/api/allclipboard/word?", jsonheader)
+        .get("https://api.sharecopy.greenbyte.systems/api/allclipboard/word?", jsonheader)
         .then(response => {
           window.console.log(response);
         });
