@@ -67,8 +67,7 @@ export default {
   data() {
     return {
       livehttpurl:'https://api.sharecopy.greenbyte.systems/',
-      localhttpurl:'https://localhost:8000/',     
-      word:'',
+       word:'',
       userid:'1',
       httpurl: "",
       info: "",
@@ -158,8 +157,7 @@ clearclipboard:function()
         'title':this.title,
         'notes':this.notes
       }
-      //https://api.sharecopy.greenbyte.systems/
-      this.$http
+       this.$http
         .post(this.livehttpurl+"api/newclipboard", postdata,jsonheader)
         .then(response => 
         {
