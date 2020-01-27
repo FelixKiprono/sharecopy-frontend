@@ -128,6 +128,13 @@ clearclipboard:function()
         this.notes = null;
       //  this.name=null;
         this.word=null;
+
+      this.toastCount++;
+      this.$bvToast.toast("Cleared Notes", {
+        title: "Sharecopy",
+        autoHideDelay: 5000,
+        appendToast: false
+      });
 },
     
     makeToast(append = false) 
