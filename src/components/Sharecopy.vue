@@ -66,6 +66,8 @@ export default {
   name: "sharecopy",
   data() {
     return {
+      livehttpurl:'https://api.sharecopy.greenbyte.systems/',
+      localhttpurl:'https://localhost:8000/',     
       word:'',
       userid:'1',
       httpurl: "",
@@ -81,7 +83,8 @@ export default {
       this.word = to.params.access;
      //alert(to.params.access);
     },
-    created(){
+    created()
+    {
        //alert(this.$route.params.access);
          this.word = this.$route.params.access;
     }
@@ -108,7 +111,7 @@ export default {
       var jsonheader = { headers: { "Content-Type": "application/json" } };
       
       this.$http
-        .get("https://api.sharecopy.greenbyte.systems/api/myclipboard", {params:{'access':word}},jsonheader)
+        .get(this.livehttpurl+"api/myclipboard", {params:{'access':word}},jsonheader)
         .then(response => 
         {
           //window.console.log(response.name);
@@ -157,7 +160,7 @@ clearclipboard:function()
       }
       //https://api.sharecopy.greenbyte.systems/
       this.$http
-        .post("https://api.sharecopy.greenbyte.systems/api/newclipboard", postdata,jsonheader)
+        .post(this.livehttpurl+"api/newclipboard", postdata,jsonheader)
         .then(response => 
         {
           this.makeToast();
@@ -168,7 +171,7 @@ clearclipboard:function()
     fetchnotes: function() {
       var jsonheader = { headers: { "Content-Type": "application/json" } };
       this.$http
-        .get("https://api.sharecopy.greenbyte.systems/api/allclipboard/word?", jsonheader)
+        .get(this.livehttpurl+"api/allclipboard/word?", jsonheader)
         .then(response => {
           window.console.log(response);
         });
