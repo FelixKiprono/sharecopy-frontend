@@ -22,13 +22,16 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="#">
+             <!--  <a class="nav-link" href="#">
                 Home
                 <span class="sr-only">(current)</span>
-              </a>
+              </a> -->
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Premium</a>
+           <li class="nav-item">
+             <!--   <router-link class="nav-link"
+              to="/myaccount"
+              >Account</router-link>
+              -->
             </li>
 
             <li class="nav-item">
@@ -37,7 +40,7 @@
              <!-- <a class="nav-link" href="#" v-b-modal.modal-1>Contact</a>
               -->
               <b-modal id="modal-1" title="Contact">
-               <p class="my-4">Email : 94apps.io@gmail.com</p>
+               <p class="my-4">Please contact us @ : 94apps.io@gmail.com</p>
                </b-modal>
             </li>
 
@@ -51,27 +54,27 @@
       <div class="container h-100">
         <div class="row h-100 align-items-center">
           <div class="col-12 text-center">
-            <h1 class="font-weight-light">Welcome to sharecopy</h1>
-            <p class="lead">Copy and share your content online</p>
-            <router-link
+            <h1 class="font-weight-light">Comming Soon ....</h1>
+            <p class="lead">Website under construction</p>
+           <!--  <router-link
               class="btn btn-primary btn-lg btn-block"
               to="/clipboard/0"
               tag="button">Start Sharing clipboard</router-link>
-
+ -->
             <br />
             <div class="input-group mb-3">
-              <input
+              <!-- <input
                 type="text"
                 class="form-control"
                 placeholder="Your Access Word"
                 v-model="access"
-              />
+              /> -->
               <div class="input-group-append">
-                 <router-link
+                <!--  <router-link
              class="btn btn-success btn-block"
               :to="{name:'clipboard',params:{access:access}}"
               tag="button">View Shared Clipboard</router-link>
-
+ -->
                <!--  <button
                   class="btn btn-success btn-block"
                   type="submit"

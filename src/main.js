@@ -8,6 +8,7 @@ import axios from 'axios'
 
 import Sharecopy from './components/Sharecopy.vue'
 import Home from './components/Home.vue'
+import User from './components/User.vue'
 
 Vue.use(VueRouter);
 
@@ -19,7 +20,8 @@ Vue.config.productionTip = false
 const approutes = 
 [
   {path:'/',component:Home},
-  {path:'/clipboard/:access',component:Sharecopy,name:'clipboard'}
+  {path:'/clipboard/:access',component:Sharecopy,name:'clipboard'},
+  {path:'/myaccount/',component:User}
 ];
 
 const router = new VueRouter(
