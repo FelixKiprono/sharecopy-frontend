@@ -76,8 +76,8 @@ export default {
   data() {
     return {
         showDismissibleAlert: true,   
-      livehttpurl:'http://localhost:8000/',
-      localhttp:'https://api.sharecopy.greenbyte.systems/',
+      livehttpurl:'https://api.sharecopy.greenbyte.systems/',
+      localhttp:'',
       idnumber:0,
       sessioncode:0,
       accessnumber:0,
@@ -144,7 +144,7 @@ export default {
     },
     deleteitem:function()
     {
-      alert(this.sessioncode);
+      //alert(this.sessioncode);
       //get the item access code and delete
       var jsonheader = { headers: { "Content-Type": "application/json" } };     
       var postdata =

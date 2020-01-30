@@ -95,7 +95,7 @@ export default {
   name: "Home",
   data() {
     return {
-      httpurl: "",
+      httpurl: "https://api.sharecopy.greenbyte.systems/",
       access: ""
     };
   },

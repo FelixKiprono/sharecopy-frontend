@@ -95,7 +95,7 @@ export default {
     
     myclips:[], 
      showDismissibleAlert: true,   
-      localhttpurl: "http://localhost:8000/",  
+      localhttpurl: "https://api.sharecopy.greenbyte.systems/",  
       notesid:'',
       id:'',     
       notes:'',
