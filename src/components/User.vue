@@ -1,5 +1,8 @@
+
 <template>
+
   <div>
+    <MyClipboard :email="email"></MyClipboard>
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
       <router-link class="navbar-brand" to="/">Account</router-link>
       <!--    <a class="navbar-brand" href="index.html">Home</a>
@@ -93,6 +96,7 @@
                   </div>
                   <button type="button" @click="Login()" class="btn btn-primary">Login</button>
                 </form>
+                 
               </div>
             </div>
           </div>
@@ -103,18 +107,20 @@
 </template>
 
 <script>
+//import MyClipboard from './MyClipboard';
 export default {
-  name: "user",
+  name: "User",
   data() {
     return {
+    
       livehttpurl: "https://api.sharecopy.greenbyte.systems/",
       localhttpurl: "http://localhost:8000/",
       name: '',
       accessnumber: 0,
       email: '',
       password: '',
-      loginusername:'',
-      loginpassword:''
+      loginusername:'sergei',
+      loginpassword:'123456'
     };
   },
   methods: {
@@ -125,15 +131,13 @@ export default {
       {
         'name':this.name,
         'email':this.email,
-        'password':this.password
-        
+        'password':this.password        
       }
        this.$http
         .post(this.localhttpurl+"api/user", postdata,jsonheader)
         .then(response => 
         {
-          this.makeToast();
-       
+         this.makeToast();       
           window.console.log(response);
         });
 
@@ -153,7 +157,10 @@ export default {
         .then(response => 
         {
          // alert('Successfully Loggedin');       
-          window.console.log(response);
+          // window.console.log(response.data.message);
+    
+            var user = response.data.message;
+           this.$router.push({ path: '/myaccount/', query: {user} })
         });
 
     },

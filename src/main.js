@@ -9,7 +9,7 @@ import axios from 'axios'
 import Sharecopy from './components/Sharecopy.vue'
 import Home from './components/Home.vue'
 import User from './components/User.vue'
-
+import MyClipboard from './components/MyClipboard.vue'
 Vue.use(VueRouter);
 
 Vue.prototype.$http = axios;
@@ -21,7 +21,8 @@ const approutes =
 [
   {path:'/',component:Home},
   {path:'/clipboard/:access',component:Sharecopy,name:'clipboard'},
-  {path:'/myaccount/',component:User}
+  {path:'/user/',component:User,props: true},
+  {path:'/myaccount/',component:MyClipboard,props: true}
 ];
 
 const router = new VueRouter(
@@ -32,6 +33,7 @@ const router = new VueRouter(
 
 
 new Vue({
+ 
   router:router,
   render: h => h(App),
 }).$mount('#app')

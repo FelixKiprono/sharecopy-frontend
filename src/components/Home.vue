@@ -15,23 +15,23 @@
           data-target="#navbarResponsive"
           aria-controls="navbarResponsive"
           aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
+          aria-label="Toggle navigation">
+
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-             <!--  <a class="nav-link" href="#">
+               <a class="nav-link" href="#">
                 Home
                 <span class="sr-only">(current)</span>
-              </a> -->
+              </a> 
             </li>
            <li class="nav-item">
-             <!--   <router-link class="nav-link"
-              to="/myaccount"
+               <router-link class="nav-link"
+              to="/user"
               >Account</router-link>
-              -->
+              
             </li>
 
             <li class="nav-item">
@@ -54,32 +54,27 @@
       <div class="container h-100">
         <div class="row h-100 align-items-center">
           <div class="col-12 text-center">
-            <h1 class="font-weight-light">Comming Soon ....</h1>
-            <p class="lead">Website under construction</p>
-           <!--  <router-link
+            <h1 class="font-weight-light">Sharecopy</h1>
+            <p class="lead">Share your clipboard </p>
+           <router-link
               class="btn btn-primary btn-lg btn-block"
               to="/clipboard/0"
               tag="button">Start Sharing clipboard</router-link>
- -->
+ 
             <br />
             <div class="input-group mb-3">
-              <!-- <input
+             <input
                 type="text"
                 class="form-control"
                 placeholder="Your Access Word"
                 v-model="access"
-              /> -->
+              />
               <div class="input-group-append">
-                <!--  <router-link
+                <router-link
              class="btn btn-success btn-block"
               :to="{name:'clipboard',params:{access:access}}"
-              tag="button">View Shared Clipboard</router-link>
- -->
-               <!--  <button
-                  class="btn btn-success btn-block"
-                  type="submit"
-                  @click="validate()"
-                >View Shared Clipboard</button> -->
+              tag="button">View Shared Clipboard</router-link> 
+                
               </div>
             </div>
             <b-toast
@@ -97,7 +92,7 @@
 
 <script>
 export default {
-  name: "home",
+  name: "Home",
   data() {
     return {
       httpurl: "",
