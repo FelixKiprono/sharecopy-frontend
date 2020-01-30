@@ -157,9 +157,10 @@ export default {
         .then(response => 
         {
          // alert('Successfully Loggedin');       
-          // window.console.log(response.data.message);
+          // window.console.log(response.data.message);      
     
             var user = response.data.message;
+           this.$UserId = user.id;
            this.$router.push({ path: '/myaccount/', query: {user} })
         });
 

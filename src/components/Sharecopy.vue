@@ -37,25 +37,29 @@
     <div class="container-fluid">
       <div class="panel panel-default">
         <div class="panel-heading">
-              <h4>Your Clipboard can be accessed with this AccessNumber :  
-                             <span class="badge badge-secondary">{{accessnumber}}</span></h4>
-     
-         <div class="form-group">
-            <b-button variant="outline-primary"  @click=" clearclipboard()">New</b-button>
-            <b-button variant="outline-primary"  @click=" saveclipboard()">Save</b-button>
-          </div>
+          <div class="alert alert-primary" role="alert">
+   <h4>Your Clipboard can be accessed with this Key : {{accessnumber}} </h4>
+          
+</div>
+<div class="btn-group" role="group" aria-label="Basic example">
+  <button type="button" class="btn btn-secondary" @click="clearclipboard()">New</button>  
+  <button type="button" class="btn btn-secondary" @click="saveclipboard()">Save</button>
+  <button type="button" class="btn btn-secondary" @click="deleteitem()">Delete</button>  
+  <button type="button" class="btn btn-secondary">ShareLink</button>
+</div>
+
            
          
         </div>
         <br>
         <div class="form-group">
           <label for="title">Clipboard Title (<i>optional</i>):</label>
-          <input type="text" class="form-control" id="title" v-model="title" />
-        </div>
+          <b-form-input id="input-small" size="sm" placeholder="Enter your ttile" v-model="title"></b-form-input>
+     </div>
         <div class="form-group">
           <div class="panel-body">
             <label for="comment">Clipboard</label>
-            <textarea class="form-control" rows="13" id="notes" v-model="notes"></textarea>
+            <b-form-textarea class="form-control" rows="13" id="notes" v-model="notes" no-resize></b-form-textarea>
           </div>
         </div>
       </div>
@@ -64,12 +68,18 @@
 </template>
 
 <script>
+
+import Swal from 'sweetalert2'
+
 export default {
   name: "sharecopy",
   data() {
     return {
-      livehttpurl:'https://api.sharecopy.greenbyte.systems/',
+        showDismissibleAlert: true,   
+      livehttpurl:'http://localhost:8000/',
+      localhttp:'https://api.sharecopy.greenbyte.systems/',
       idnumber:0,
+      sessioncode:0,
       accessnumber:0,
       word:'',
       userid:'1',
@@ -84,12 +94,14 @@ export default {
     '$route' (to)
     {
       this.word = to.params.access;
+      
      //alert(to.params.access);
     },
     created()
     {
        //alert(this.$route.params.access);
          this.word = this.$route.params.access;
+         this.sessioncode = this.$route.params.access;
     }
 
   },
@@ -116,7 +128,7 @@ export default {
       var jsonheader = { headers: { "Content-Type": "application/json" } };
       
       this.$http
-        .get(this.livehttpurl+"api/myclipboard", {params:{'access':word}},jsonheader)
+        .get(this.livehttpurl+"api/mynotes", {params:{'access':word}},jsonheader)
         .then(response => 
         {
           //window.console.log(response.name);
@@ -130,8 +142,49 @@ export default {
       //render the data to page
      
     },
-clearclipboard:function()
-{
+    deleteitem:function()
+    {
+      alert(this.sessioncode);
+      //get the item access code and delete
+      var jsonheader = { headers: { "Content-Type": "application/json" } };     
+      var postdata =
+      {
+        'access':this.sessioncode
+      };
+              
+          Swal.fire({
+  title: 'Delete',
+  text: 'Do you want to to delete this item',
+  icon: 'error',
+  showCancelButton: true,
+  confirmButtonText: 'Yes',
+  cancelButtonText: 'No',
+  reverseButtons: false
+}).then((result) => {
+  if (result.value) {
+    this.$http
+        .post(this.livehttpurl+"api/deleteitembycode", postdata,jsonheader)
+        .then(response => 
+        {
+          window.console.log(response);          
+        });
+  } 
+  else if(
+    /* Read more about handling dismissals below */
+    result.dismiss === Swal.DismissReason.cancel
+  ) {
+    Swal.fire(
+      'Cancelled',
+      'Your clipboard item  is safe :)',
+      'error'
+    )
+  }
+})
+         
+
+    },   
+    clearclipboard:function()
+    {
         this.title=null;
         this.notes = null;
       //  this.name=null;
@@ -170,15 +223,6 @@ clearclipboard:function()
         .then(response => 
         {
           this.makeToast();
-          window.console.log(response);
-        });
-
-    },
-    fetchnotes: function() {
-      var jsonheader = { headers: { "Content-Type": "application/json" } };
-      this.$http
-        .get(this.livehttpurl+"api/allclipboard/word?", jsonheader)
-        .then(response => {
           window.console.log(response);
         });
     }

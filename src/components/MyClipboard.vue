@@ -1,7 +1,7 @@
 <template>
 <div>
  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
-      <router-link class="navbar-brand" to="/">My Account</router-link>
+      <router-link class="navbar-brand" to="/"> {{name}} clipboard</router-link>
      <br>
     
       <!--    <a class="navbar-brand" href="index.html">Home</a>
@@ -11,7 +11,7 @@
         <ul class="navbar-nav ml-auto">
           <li class="nav-item active">
             <a class="nav-link" href>
-              {{email}}
+            Logout
             </a>
           </li>
         </ul>
@@ -22,18 +22,29 @@
   <br>
   <br>
   <br>
-  <br>
+  <b-alert v-model="showDismissibleAlert" variant="success" dismissible>
+      {{message}}
+    </b-alert>
+
 <div class="row">
   
 <div class="col-sm">
+
+     <h6 class="text-muted">New Clipboard</h6> 
+
+ 
+   <hr>
 <div class="form-group">
           <label for="title">Clipboard Title (<i>optional</i>):</label>
-          <input type="text" class="form-control" id="title" v-model="title" />
-        </div>
+           <b-form-input id="input-small" size="sm" placeholder="Enter your ttile" v-model="title"></b-form-input>
+  
+         </div>
         <div class="form-group">
           <div class="panel-body">
             <label for="comment">Clipboard</label>
-            <textarea class="form-control" rows="13" id="notes" v-model="notes"></textarea>
+            <b-form-textarea class="form-control" no-resize rows="12" id="notes" v-model="notes">
+
+            </b-form-textarea>
           </div>
         </div>
          <div class="form-group">
@@ -42,18 +53,29 @@
 </div>
 
 <div class="col-sm">
-  <!-- <ul class="list-group"> -->
- <ul class="list-group list-group-flush">
-  <li class="list-group-item"><b>My Clipboard Items</b></li>
- <li class="list-group-item d-flex justify-content-between align-items-center" v-for="clipboard in myclips" v-bind:key="clipboard.id">
-    {{ clipboard.title }}
-
-    
-      <b-button-group class="mx-1">
-      <b-button>Share</b-button>      
-    </b-button-group>
   
-  </li>
+  <h6 class="text-muted">My Clipboard Items</h6> 
+
+<b-input-group prepend="Search By title" class="mt-3">
+    <b-form-input></b-form-input>
+    <b-input-group-append>
+      <b-button variant="info">Search</b-button>
+    </b-input-group-append>
+  </b-input-group>
+  <br>
+<!-- <ul class="list-group"> -->
+<ul class="list-group list-group-flush" style="height: 400px;">
+
+<li class="list-group-item d-flex justify-content-between align-items-center list-group-item-action"   v-for="clipboard in myclips" v-bind:key="clipboard.id" >
+
+    {{ clipboard.title }}
+<b-button-group size="sm" class="mt-3">
+      <b-button variant="primary" @click="currentitem(clipboard)">View</b-button>   
+      <b-button @click="deleteitem(clipboard)">Delete</b-button>
+      <b-button variant="primary">Share</b-button>   
+</b-button-group>
+
+</li>
 </ul>
 </div>
 
@@ -62,6 +84,8 @@
 </div>
 </template>
 <script>
+import Swal from 'sweetalert2'
+
 export default {
   name: "MyClipboard",  
    
@@ -69,16 +93,21 @@ export default {
   {    
   return {
     
-    myclips:[],    
+    myclips:[], 
+     showDismissibleAlert: true,   
       localhttpurl: "http://localhost:8000/",  
+      notesid:'',
       id:'',     
       notes:'',
       title:'',
       email:'',
-      access:'4234234'
+      name:'',
+      access:'4234234',
+      message:'You can view your clipboard items here.'
     }
     },
   methods:{
+
     reloadClips:function(userid)
     {
 //fetch posts with this user id
@@ -92,12 +121,61 @@ export default {
        
         });
     },
-    addclipboard:function()
+     currentitem:function(item)
     {
-//var accessnumber =  Math.floor(Math.random() * 100);
-      var jsonheader = { headers: { "Content-Type": "application/json" } };
+      this.title = item.title;
+      this.notes = item.clipboard;
+      this.notesid = item.notesid;
+    },
+    deleteitem:function(item)
+    {
+      var jsonheader = { headers: { "Content-Type": "application/json" } };     
       var postdata =
       {
+        'notesid':item.notesid
+      };
+              
+          Swal.fire({
+  title: 'Delete',
+  text: 'Do you want to to delete this item',
+  icon: 'error',
+  showCancelButton: true,
+  confirmButtonText: 'Yes',
+  cancelButtonText: 'No',
+  reverseButtons: false
+}).then((result) => {
+  if (result.value) {
+    this.$http
+        .post(this.localhttpurl+"api/myclipboard", postdata,jsonheader)
+        .then(response => 
+        {
+          window.console.log(response);          
+        });
+  } 
+  else if(
+    /* Read more about handling dismissals below */
+    result.dismiss === Swal.DismissReason.cancel
+  ) {
+    Swal.fire(
+      'Cancelled',
+      'Your clipboard item  is safe :)',
+      'error'
+    )
+  }
+})
+         
+        //reload list items 
+
+    },
+    addclipboard:function()
+    {
+      var jsonheader = { headers: { "Content-Type": "application/json" } };
+     
+      if(this.notes.length>0)
+      {
+      var postdata =
+      {
+        'id':this.notesid,
         'userid':this.id,
         'title':this.title,
         'notes':this.notes,
@@ -106,11 +184,21 @@ export default {
        this.$http
         .post(this.localhttpurl+"api/newclipboard", postdata,jsonheader)
         .then(response => 
-        {          
-          this.reloadClips(response.data.userid);
+        {
+
+          //Swal.fire('Successfully Added New Clipboard')
+          this.message ='Successfully Added New Clipboard';
+          this.showDismissibleAlert=true;
+          this.reloadClips(this.id);
           window.console.log(response);
           
         });
+      }
+      else
+      {
+        alert("Cannot save empty results");
+
+      }
     },
        initfunc: function()
        {
@@ -119,6 +207,8 @@ export default {
       var user =  this.$route.query.user;
       this.id = user.id;
       this.email = user.email;
+      this.name = user.name;
+      this.message = 'Dear '+user.name+' welcome aboard captain, you can manage your items here.';
 
     //fetch posts with this user id
        var jsonheader = { headers: { "Content-Type": "application/json" } };
@@ -153,4 +243,15 @@ export default {
      height:150px;
     -webkit-overflow-scrolling: touch;
 }*/
+.list-group{
+position: relative;
+height: 200px;
+overflow: auto;
+}
+.table-wrapper-scroll-y {
+display: block;
+}
+body{
+  padding: 2rem 0rem;
+}
 </style>
