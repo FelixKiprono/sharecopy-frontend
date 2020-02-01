@@ -102,7 +102,7 @@ export default {
       title:'',
       email:'',
       name:'',
-      access:'4234234',
+      access:'',
       message:'You can view your clipboard items here.'
     }
     },

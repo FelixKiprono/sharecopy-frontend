@@ -37,18 +37,18 @@
     <div class="container-fluid">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <div class="alert alert-primary" role="alert">
-   <h4>Your Clipboard can be accessed with this Key : {{accessnumber}} </h4>
+          <div class="alert alert-success" role="alert">
+   <h5>Your Clipboard can be accessed with this Key : {{accessnumber}} </h5>
+         
           
 </div>
 <div class="btn-group" role="group" aria-label="Basic example">
   <button type="button" class="btn btn-secondary" @click="clearclipboard()">New</button>  
   <button type="button" class="btn btn-secondary" @click="saveclipboard()">Save</button>
   <button type="button" class="btn btn-secondary" @click="deleteitem()">Delete</button>  
-  <button type="button" class="btn btn-secondary">ShareLink</button>
+  <button type="button" class="btn btn-primary">ShareLink</button>
 </div>
 
-           
          
         </div>
         <br>
@@ -60,7 +60,9 @@
           <div class="panel-body">
             <label for="comment">Clipboard</label>
             <b-form-textarea class="form-control" rows="13" id="notes" v-model="notes" no-resize></b-form-textarea>
+         
           </div>
+      
         </div>
       </div>
     </div>
@@ -189,6 +191,8 @@ export default {
         this.notes = null;
       //  this.name=null;
         this.word=null;
+         this.accessnumber =  Math.floor(Math.random() * 100000);
+    
 
       this.toastCount++;
       this.$bvToast.toast("Cleared Notes", {

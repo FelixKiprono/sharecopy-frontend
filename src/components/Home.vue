@@ -7,7 +7,8 @@
       <div class="container">
         <!-- <img src="../../public/logo.png">
          -->
-        <a class="navbar-brand" href="#"> <h1 class="font-weight-light">Sharecopy </h1></a>
+        <a class="navbar-brand" href="#"> <h1 class="font-weight-light">
+           Sharecopy </h1></a><span class="label label-default">Worry no more ...</span>
         <button
           class="navbar-toggler"
           type="button"
@@ -23,7 +24,7 @@
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
                <a class="nav-link" href="#">
-                Home
+                Demo
                 <span class="sr-only">(current)</span>
               </a> 
             </li>
@@ -54,26 +55,26 @@
       <div class="container h-100">
         <div class="row h-100 align-items-center">
           <div class="col-12 text-center">
-            <h1 class="font-weight-light">Sharecopy</h1>
-            <p class="lead">Share your clipboard </p>
+            <h1 class="font-weight-light"><font color="green">Copy</font> <font color="brown">Paste</font> <font color="blue">Share</font></h1>
+            <p class="lead">Access your clipboard anywhere, anytime with any device</p>
            <router-link
               class="btn btn-primary btn-lg btn-block"
               to="/clipboard/0"
-              tag="button">Start Sharing clipboard</router-link>
+              tag="button">Start </router-link>
  
             <br />
             <div class="input-group mb-3">
              <input
                 type="text"
                 class="form-control"
-                placeholder="Your Access Word"
+                placeholder="Your Access Phrase"
                 v-model="access"
               />
               <div class="input-group-append">
                 <router-link
              class="btn btn-success btn-block"
               :to="{name:'clipboard',params:{access:access}}"
-              tag="button">View Shared Clipboard</router-link> 
+              tag="button" >View Shared Clipboard</router-link> 
                 
               </div>
             </div>
@@ -82,7 +83,7 @@
               title="Sharecopy"
               static
               no-auto-hide
-            >Provide Access Code Before Proceeding.</b-toast>
+            >Provide Access Phrase Before Proceeding.</b-toast>
           </div>
         </div>
       </div>
@@ -102,10 +103,11 @@ export default {
   methods: {
     validate: function() {
       if (this.access === "") {
+       
         //  this.$bvToast.show('example-toast');
         this.message(
           "b-toaster-bottom-full danger",
-          "Please Provide Access Code",
+          "Your access phrase cannot be empty",
           true
         );
       }
