@@ -78,8 +78,8 @@ export default {
   data(){
     return {
       showDismissibleAlert: true,   
-     // livehttpurl:'https://api.sharecopy.greenbyte.systems/',
-      livehttpurl:'http://localhot:8000/',
+      livehttpurl:'https://api.sharecopy.greenbyte.systems/',
+     // livehttpurl:'http://localhot:8000/',
       idnumber:0,
       sessioncode:0,
       accessnumber:0,

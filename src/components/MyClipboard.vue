@@ -59,7 +59,7 @@
 <b-input-group prepend="Search By title" class="mt-3">
     <b-form-input></b-form-input>
     <b-input-group-append>
-      <b-button variant="info">Search</b-button>
+      <b-button variant="info" @click="LoadClips(4)">Search</b-button>
     </b-input-group-append>
   </b-input-group>
   <br>
@@ -94,7 +94,9 @@ export default {
   return {
      myclips:[], 
      showDismissibleAlert: true,  
-    localhttpurl:"https://api.sharecopy.greenbyte.systems/",   
+      localhttpurl:"https://api.sharecopy.greenbyte.systems/",  
+       // localhttpurl:"http://localhost:8000/",   
+      
       notesid:'',
       id:'',     
       notes:'',
@@ -116,9 +118,21 @@ export default {
         .then(response => 
         {
          window.console.log(response.data);
-         this.myclips = response.data;
+        // this.myclips = response.data;
        
         });
+    },
+    LoadClips:function(userid)
+    { 
+      var jsonheader = { headers: { "Content-Type": "application/json" } };
+        this.$http
+        .get(this.localhttpurl+"api/myclipboard/",{params:{'userid':userid}}, jsonheader)
+        .then(response => 
+        {
+         window.console.log(response.data);
+       
+        });
+
     },
      currentitem:function(item)
     {
@@ -200,15 +214,7 @@ export default {
       this.message = 'Dear '+user.name+' welcome aboard captain, you can manage your items here.';
 
     //fetch posts with this user id
-       var jsonheader = { headers: { "Content-Type": "application/json" } };
-        this.$http
-        .get(this.localhttpurl+"api/myclipboard/",{params:{'userid':this.id}}, jsonheader)
-        .then(response => 
-        {
-         window.console.log(response.data);
-         this.myclips = response.data;
-       
-        });
+   this.reloadClips(user.id);
 
         
         

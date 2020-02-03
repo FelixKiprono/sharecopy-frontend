@@ -97,7 +97,7 @@ export default {
   data() {
     return {
       httpurl: "https://api.sharecopy.greenbyte.systems/",
-      //   httpurl: "http://localhost:8000/",   
+      //  httpurl: "http://localhost:8000/",   
       access: ""
     };
   },
