@@ -113,8 +113,8 @@ export default {
   data() {
     return {
     
-      livehttpurl: "https://api.sharecopy.greenbyte.systems/",
       localhttpurl: "https://api.sharecopy.greenbyte.systems/",
+     // localhttpurl: "http://localhost:8000/",
       name: '',
       accessnumber: 0,
       email: '',
@@ -134,7 +134,7 @@ export default {
         'password':this.password        
       }
        this.$http
-        .post(this.localhttpurl+"api/user", postdata,jsonheader)
+        .post(this.localhttpurl+"api/adduser", postdata,jsonheader)
         .then(response => 
         {
          this.makeToast();       

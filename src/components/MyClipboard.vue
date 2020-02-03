@@ -92,10 +92,12 @@ export default {
   data() 
   {    
   return {
-    
-    myclips:[], 
-     showDismissibleAlert: true,   
-      localhttpurl: "https://api.sharecopy.greenbyte.systems/",  
+     myclips:[], 
+     showDismissibleAlert: true,  
+      // localhttpurl: "http://localhost:8000/"  
+   
+    localhttpurl:"//api.sharecopy.greenbyte.systems/",
+   
       notesid:'',
       id:'',     
       notes:'',
@@ -151,16 +153,6 @@ export default {
         {
           window.console.log(response);          
         });
-  } 
-  else if(
-    /* Read more about handling dismissals below */
-    result.dismiss === Swal.DismissReason.cancel
-  ) {
-    Swal.fire(
-      'Cancelled',
-      'Your clipboard item  is safe :)',
-      'error'
-    )
   }
 })
          

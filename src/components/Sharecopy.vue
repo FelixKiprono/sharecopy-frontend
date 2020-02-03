@@ -75,11 +75,11 @@ import Swal from 'sweetalert2'
 
 export default {
   name: "sharecopy",
-  data() {
+  data(){
     return {
-        showDismissibleAlert: true,   
-      livehttpurl:'https://api.sharecopy.greenbyte.systems/',
-      localhttp:'',
+      showDismissibleAlert: true,   
+     // livehttpurl:'https://api.sharecopy.greenbyte.systems/',
+      livehttpurl:'http://localhot:8000/',
       idnumber:0,
       sessioncode:0,
       accessnumber:0,
