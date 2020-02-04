@@ -113,8 +113,8 @@ export default {
   data() {
     return {
     
-      localhttpurl: "https://api.sharecopy.greenbyte.systems/",
-     // localhttpurl: "http://localhost:8000/",
+      //localhttpurl: "https://api.sharecopy.greenbyte.systems/",
+      localhttpurl: "http://localhost:8000/",
       name: '',
       accessnumber: 0,
       email: '',

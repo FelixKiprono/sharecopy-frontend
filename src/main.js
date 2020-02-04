@@ -7,10 +7,14 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap-vue/dist/bootstrap-vue.css"
 import axios from 'axios'
 
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+
+
 import Sharecopy from './components/Sharecopy.vue'
 import Home from './components/Home.vue'
 import User from './components/User.vue'
 import MyClipboard from './components/MyClipboard.vue'
+
 Vue.use(VueRouter);
 
 Vue.prototype.$http = axios;

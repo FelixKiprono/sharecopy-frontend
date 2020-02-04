@@ -8,7 +8,7 @@
         <!-- <img src="../../public/logo.png">
          -->
         <a class="navbar-brand" href="#"> <h1 class="font-weight-light">
-           Sharecopy </h1></a><span class="label label-default">Worry no more ...</span>
+           Sharecopy </h1></a><span class="label label-default">Share faster </span>
         <button
           class="navbar-toggler"
           type="button"
@@ -22,18 +22,18 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
+           <!--  <li class="nav-item active">
                <a class="nav-link" href="#">
                 Demo
                 <span class="sr-only">(current)</span>
               </a> 
-            </li>
-           <li class="nav-item">
+            </li> -->
+        <!--    <li class="nav-item">
                <router-link class="nav-link"
               to="/user"
               >Account</router-link>
               
-            </li>
+            </li> -->
 
             <li class="nav-item">
               <b-link  class="nav-link" v-b-modal.modal-1>Contact us</b-link>
@@ -97,7 +97,7 @@ export default {
   data() {
     return {
       httpurl: "https://api.sharecopy.greenbyte.systems/",
-      //  httpurl: "http://localhost:8000/",   
+      //httpurl: "http://localhost:8000/",   
       access: ""
     };
   },

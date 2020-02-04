@@ -24,8 +24,9 @@
         <ul class="navbar-nav ml-auto">
           <li class="nav-item active">
             <a class="nav-link" href>
-              {{name}} Clipboard
-              <span class="badge badge-success">(Connected)</span>
+              Clipboard
+              <span class="badge badge-success">(Connected Beta 1.0)</span>
+       
             </a>
           </li>
         </ul>
@@ -37,17 +38,38 @@
     <div class="container-fluid">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <div class="alert alert-success" role="alert">
-   <h5>Your Clipboard can be accessed with this Key : {{accessnumber}} </h5>
-         
-          
+          <div class="alert alert-primary" role="alert">
+ <h5>
+Dear user this clipboard can be accessed with this Key : {{sessioncode}} </h5>  
+
+<b-modal id="changeuser" title="Sharecopy account"> 
+
+<form class="ui form" v-on:submit.prevent="onSubmit">
+
+    <label for="input-live">Your username:</label>
+    <b-form-input
+      id="input-live"
+      v-model="username"
+      :state="nameState"
+      aria-describedby="input-live-help input-live-feedback"
+      placeholder="Enter your username"
+      trim
+    >
+    </b-form-input>
+
+    <!-- This will only be shown if the preceding input has an invalid state -->
+    <b-form-invalid-feedback id="input-live-feedback">
+      Username already exists
+    </b-form-invalid-feedback> 
+</form>
+</b-modal>
 </div>
+
 <div class="btn-group" role="group" aria-label="Basic example">
   <button type="button" class="btn btn-secondary" @click="clearclipboard()">New</button>  
   <button type="button" class="btn btn-secondary" @click="saveclipboard()">Save</button>
-  <button type="button" class="btn btn-secondary" @click="deleteitem()">Delete</button>  
-  <button type="button" class="btn btn-primary">ShareLink</button>
-</div>
+  <button type="button" class="btn btn-danger" @click="deleteitem()">Destroy Session</button>  
+ </div>
 
          
         </div>
@@ -55,31 +77,43 @@
         <div class="form-group">
           <label for="title">Clipboard Title (<i>optional</i>):</label>
           <b-form-input id="input-small" size="sm" placeholder="Enter your ttile" v-model="title"></b-form-input>
-     </div>
+        </div>
         <div class="form-group">
           <div class="panel-body">
             <label for="comment">Clipboard</label>
             <b-form-textarea class="form-control" rows="13" id="notes" v-model="notes" no-resize></b-form-textarea>
          
-          </div>
-      
+      </div>      
         </div>
       </div>
     </div>
   </div>
 </template>
-
 <script>
 
 import Swal from 'sweetalert2'
 
 export default {
   name: "sharecopy",
+   computed: {
+      nameState(){
+        if(this.username.length>4)
+        {
+          return true;
+          //add the user here
+          //this.addUser();
+        }
+        else
+        {
+          return false;
+        }
+      
+      }},
   data(){
     return {
       showDismissibleAlert: true,   
       livehttpurl:'https://api.sharecopy.greenbyte.systems/',
-     // livehttpurl:'http://localhot:8000/',
+    // livehttpurl:'http://localhost:8000/',
       idnumber:0,
       sessioncode:0,
       accessnumber:0,
@@ -89,14 +123,17 @@ export default {
       info: "",
       title: "",
       notes:"",
-      name:""
+      name:"",
+      text:'',
+      status:'',
+      username:''
     };
   },
+  
   watch:{
     '$route' (to)
     {
-      this.word = to.params.access;
-      
+      this.word = to.params.access;      
      //alert(to.params.access);
     },
     created()
@@ -111,13 +148,12 @@ export default {
   {
     initfunc: function()
     {
-       this.accessnumber =  Math.floor(Math.random() * 100000);
+       this.sessioncode =  Math.floor(Math.random() * 100000);
     
       //get word as a parameter
-      var word = null;
       if(this.$route.params.access!=null)
       {
-        word = this.$route.params.access
+        this.sessioncode = this.$route.params.access
       }
       else
       {
@@ -130,7 +166,7 @@ export default {
       var jsonheader = { headers: { "Content-Type": "application/json" } };
       
       this.$http
-        .get(this.livehttpurl+"api/mynotes", {params:{'access':word}},jsonheader)
+        .get(this.livehttpurl+"api/mynotes", {params:{'access':this.sessioncode}},jsonheader)
         .then(response => 
         {
           //window.console.log(response.name);
@@ -144,8 +180,65 @@ export default {
       //render the data to page
      
     },
+    changeUsername()
+    {
+      
+       this.$changeuser.msgBoxOk('Action completed')
+          .then(value => {
+           alert(value);
+          })
+          .catch(err => {
+            // An error occurred
+            window.console.log(err);
+          })
+    },
+    addUser: function() 
+    {
+     var jsonheader = { headers: { "Content-Type": "application/json" } };
+      var postdata =
+      {
+        'name':this.username,
+        'email':this.username+'@sharecopy.com',
+        'password':'123456'        
+      }
+       this.$http
+        .post(this.localhttpurl+"api/adduser", postdata,jsonheader)
+        .then(response => 
+        {                
+          window.console.log(response);
+        });
+
+    },
+    CheckIfAvailable:function()
+    {
+      if(this.text.length>0)
+      {
+        this.status = name+'available';
+      }
+      else
+      {
+        this.status = '';
+
+      }
+
+    },
+    ChangeUsername:function()
+    {
+    const { value: username } =  Swal.fire({
+      title: 'Your beutiful username',
+      input: 'text',
+      inputPlaceholder: 'felix,sergei,yuan,blacknight etc'
+      });
+      if (username) 
+      {
+        //Swal.fire(`Entered username: ${username}`)
+      }
+    },
     deleteitem:function()
     {
+      if(this.sessioncode.length>0)
+      {
+        
       //alert(this.sessioncode);
       //get the item access code and delete
       var jsonheader = { headers: { "Content-Type": "application/json" } };     
@@ -181,7 +274,8 @@ export default {
       'error'
     )
   }
-})
+});
+      }
          
 
     },   
@@ -191,7 +285,7 @@ export default {
         this.notes = null;
       //  this.name=null;
         this.word=null;
-         this.accessnumber =  Math.floor(Math.random() * 100000);
+         this.sessioncode =  Math.floor(Math.random() * 100000000);
     
 
       this.toastCount++;
@@ -213,6 +307,8 @@ export default {
     },
     saveclipboard: function()
     {
+      if(this.notes.length>4)
+      {
       //var accessnumber =  Math.floor(Math.random() * 100);
       var jsonheader = { headers: { "Content-Type": "application/json" } };
       var postdata =
@@ -220,7 +316,7 @@ export default {
         'userid':this.userid,
         'title':this.title,
         'notes':this.notes,
-        'access':this.accessnumber
+        'access':this.sessioncode
       }
        this.$http
         .post(this.livehttpurl+"api/newclipboard", postdata,jsonheader)
@@ -229,6 +325,7 @@ export default {
           this.makeToast();
           window.console.log(response);
         });
+    }
     }
   },
   mounted()

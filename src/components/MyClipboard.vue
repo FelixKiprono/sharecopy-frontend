@@ -59,16 +59,14 @@
 <b-input-group prepend="Search By title" class="mt-3">
     <b-form-input></b-form-input>
     <b-input-group-append>
-      <b-button variant="info" @click="LoadClips(4)">Search</b-button>
+      <b-button variant="info" @click="LoadClips(9)">Search</b-button>
     </b-input-group-append>
   </b-input-group>
   <br>
 <!-- <ul class="list-group"> -->
 <ul class="list-group list-group-flush" style="height: 400px;">
-
 <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-action"   v-for="clipboard in myclips" v-bind:key="clipboard.id" >
-
-    {{ clipboard.title }}
+{{ clipboard.title }}
 <b-button-group size="sm" class="mt-3">
       <b-button variant="primary" @click="currentitem(clipboard)">View</b-button>   
       <b-button @click="deleteitem(clipboard)">Delete</b-button>
@@ -94,9 +92,8 @@ export default {
   return {
      myclips:[], 
      showDismissibleAlert: true,  
-      localhttpurl:"https://api.sharecopy.greenbyte.systems/",  
-       // localhttpurl:"http://localhost:8000/",   
-      
+      //localhttpurl:"https://api.sharecopy.greenbyte.systems/",  
+      localhttpurl:"http://localhost:8000/",    
       notesid:'',
       id:'',     
       notes:'',
@@ -112,13 +109,16 @@ export default {
     reloadClips:function(userid)
     {
 //fetch posts with this user id
-       var jsonheader = { headers: { "Content-Type": "application/json" } };
-        this.$http
-        .get(this.localhttpurl+"api/myclipboard/",{params:{'userid':userid}}, jsonheader)
+       var jsonheader = { headers: { "Content-Type": "application/json" }};
+      // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
+     /*   this.$http
+       .setHeader('Access-Control-Allow-Origin', 'http://localhost:8000');
+ */
+        this.$http.get(this.localhttpurl+"api/myclipboard/",{params:{'userid':userid}}, jsonheader)
         .then(response => 
         {
-         window.console.log(response.data);
-        // this.myclips = response.data;
+         window.console.log(response);
+         this.myclips = response.data;
        
         });
     },
@@ -203,9 +203,8 @@ export default {
 
       }
     },
-       initfunc: function()
-       {
-        
+    initfunc: function()
+    {
          //fetch data from the other component
       var user =  this.$route.query.user;
       this.id = user.id;
@@ -213,11 +212,8 @@ export default {
       this.name = user.name;
       this.message = 'Dear '+user.name+' welcome aboard captain, you can manage your items here.';
 
-    //fetch posts with this user id
-   this.reloadClips(user.id);
-
-        
-        
+      //fetch posts with this user id
+      this.reloadClips(user.id);          
       }
      
     },
