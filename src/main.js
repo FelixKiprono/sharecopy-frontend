@@ -14,18 +14,20 @@ import Sharecopy from './components/Sharecopy.vue'
 import Home from './components/Home.vue'
 import User from './components/User.vue'
 import MyClipboard from './components/MyClipboard.vue'
-
+//import VeeValidate from 'vee-validate'
 Vue.use(VueRouter);
 
 Vue.prototype.$http = axios;
 Vue.prototype.$UserId = null;
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false 
+
+//Vue.use(VeeValidate);
  
 const approutes = 
 [
   {path:'/',component:Home},
-  {path:'/clipboard/:access',component:Sharecopy,name:'clipboard'},
+  {path:'/clipboard/',component:Sharecopy,props: true},
   {path:'/user/',component:User,props: true},
   {path:'/myaccount/',component:MyClipboard,props: true}
 ];

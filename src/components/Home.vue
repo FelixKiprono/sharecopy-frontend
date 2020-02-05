@@ -57,11 +57,14 @@
           <div class="col-12 text-center">
             <h1 class="font-weight-light"><font color="green">Copy</font> <font color="brown">Paste</font> <font color="blue">Share</font></h1>
             <p class="lead">Access your clipboard anywhere, anytime with any device</p>
-           <router-link
+  <!--          <router-link
               class="btn btn-primary btn-lg btn-block"
               to="/clipboard/0"
-              tag="button">Start </router-link>
- 
+              tag="button" id="start-here" v-b-tooltip.hover>
+              Start 
+          </router-link> -->
+           
+            <b-button  id="start-here" v-b-tooltip.hover block variant="btn btn-primary btn-lg btn-block" @click="openSharecopy(false)">Start</b-button>
             <br />
             <div class="input-group mb-3">
              <input
@@ -71,19 +74,31 @@
                 v-model="access"
               />
               <div class="input-group-append">
-                <router-link
+                 <b-button  id="view-shared" v-b-tooltip.hover block variant="btn btn-success" @click="openSharecopy(true)">
+                   View Shared Clipboard</b-button>
+                   
+    
+               <!--  <router-link 
              class="btn btn-success btn-block"
-              :to="{name:'clipboard',params:{access:access}}"
-              tag="button" >View Shared Clipboard</router-link> 
+              :to="{path:'clipboard',query:{sessioncode:access}}"
+              tag="button" >View Shared Clipboard</router-link>  -->
                 
               </div>
+              
             </div>
+             <b-alert v-model="showDismissibleAlert" show variant="danger">Provide access phrase/code before proceeding!</b-alert>
+       
             <b-toast
               id="example-toast"
               title="Sharecopy"
               static
               no-auto-hide
             >Provide Access Phrase Before Proceeding.</b-toast>
+
+
+            <b-tooltip  target="start-here" triggers="hover">
+    Create new clipboard,text or code by clicking this button
+  </b-tooltip>
           </div>
         </div>
       </div>
@@ -96,9 +111,11 @@ export default {
   name: "Home",
   data() {
     return {
+      showDismissibleAlert: false,
       httpurl: "https://api.sharecopy.greenbyte.systems/",
-      //httpurl: "http://localhost:8000/",   
-      access: ""
+     // httpurl: "http://localhost:8000/",   
+      access: '',
+      inputRules:[v=>v.length<1 || 'You have to provide access code']
     };
   },
   methods: {
@@ -113,6 +130,31 @@ export default {
         );
       }
     },
+    openSharecopy:function(state)
+    {
+      if(!state)
+      {
+        this.access='#';
+
+      }
+     
+
+      if(this.access.length==0)
+      {
+        this.showDismissibleAlert=true;
+      }
+      else
+      {
+         this.showDismissibleAlert=false;
+      var access =
+      {
+        sessioncode : this.access
+      }
+      this.$router.push({ path: '/clipboard/', query: {access} });
+      }   
+    
+   
+   },
     message(toaster, body, append = false) {
       this.counter++;
       this.$bvToast.toast(body, {
