@@ -46,8 +46,8 @@
 
 <div class="btn-group" role="group" aria-label="Basic example">
   <button type="button" class="btn btn-secondary" @click="clearclipboard(true)">New</button>  
-  <button type="button" class="btn btn-secondary" @click="saveclipboard()">Save</button>
-  <button type="button" class="btn btn-danger" @click="deleteitem()">Destroy Session</button>  
+  <button type="button" class="btn btn-primary" @click="saveclipboard()">Save</button>
+  <button type="button" disabled class="btn btn-danger" @click="deleteitem()">Destroy Session</button>  
  </div>
 
          
