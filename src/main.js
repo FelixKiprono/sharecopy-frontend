@@ -19,9 +19,7 @@ import MyClipboard from './components/MyClipboard.vue'
 
 import VueAnalytics from 'vue-analytics';
 // Configuration VueAnalytics
-Vue.use(VueAnalytics, {
-  id: 'UA-157958865-1'
-});
+
 //import VeeValidate from 'vee-validate'
 Vue.use(VueRouter);
 
@@ -46,6 +44,10 @@ const router = new VueRouter(
   }
 );
 
+Vue.use(VueAnalytics, {
+  id: 'UA-157958865-1',
+  router
+});
 
 
 new Vue({
