@@ -10,8 +10,7 @@ import axios from 'axios'
 import VueAnalytics from 'vue-analytics';
 // Configuration VueAnalytics
 Vue.use(VueAnalytics, {
-  id: 'UA-157958865-1',
-  VueRouter
+  id: 'UA-157958865-1'
 });
 
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
