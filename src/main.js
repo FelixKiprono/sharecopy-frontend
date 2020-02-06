@@ -8,7 +8,11 @@ import "bootstrap-vue/dist/bootstrap-vue.css"
 import axios from 'axios'
 
 import VueAnalytics from 'vue-analytics';
-
+// Configuration VueAnalytics
+Vue.use(VueAnalytics, {
+  id: 'UA-157958865-1',
+  VueRouter
+});
 
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
@@ -40,15 +44,7 @@ const router = new VueRouter(
     routes:approutes
   }
 );
-// Configuration VueAnalytics
-Vue.use(VueAnalytics, {
-  id: 'UA-157958865-1',
-  // [Required] The name of your app as specified in Google Analytics.
-  appName: 'sharecopy',
-  // [Required] The version of your app.
-  appVersion: '1.0',
-  vueRouter: router,
-});
+
 
 
 new Vue({
