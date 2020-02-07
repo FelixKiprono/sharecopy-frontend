@@ -5,8 +5,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
       <router-link
              class="navbar-brand"
-              to="/"
-              >Back Home</router-link>
+              to="/">Back</router-link>
    <!--    <a class="navbar-brand" href="index.html">Home</a>
     -->   
     <button
@@ -24,10 +23,11 @@
         <ul class="navbar-nav ml-auto">
           <li class="nav-item active">
             <a class="nav-link" href>
-              Clipboard
+               Clipboard
               <span class="badge badge-success">(Connected Beta 1.0)</span>
-       
-            </a>
+      
+
+       </a>
           </li>
         </ul>
       </div>
@@ -38,11 +38,27 @@
     <div class="container-fluid">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <div class="alert alert-primary" role="alert">
- <h5>
-{{message}} </h5>  
 
+          <b-row>
+  <b-col lg="8" class="pb-2">
+<div class="alert alert-primary" role="alert">
+  
+{{message}}
 </div>
+  </b-col>
+  <b-col lg="4" class="pb-2">
+     <b-button size="lg" variant="outline-secondary" v-b-modal.modal-generateaccess>set access phrase/code</b-button>
+  </b-col>
+</b-row>
+<b-modal id="modal-generateaccess"  ref="modal-generateaccess" hide-footer centered title="Set new access phrase/code">
+    <p class="my-4">
+      <i>(use a unique phrase/code)</i>
+       <b-form-input id="input-phrase" v-model="newphrase" :state="true" placeholder="Your code/phrase"></b-form-input>
+    </p>
+     <b-button block variant="primary" @click="generatenewaccess()">Save</b-button>
+    
+</b-modal>
+
 
 <div class="btn-group" role="group" aria-label="Basic example">
   <button type="button" class="btn btn-secondary" @click="clearclipboard(true)">New</button>  
@@ -86,6 +102,7 @@ export default {
       notes:"",
       text:'',
       status:'',
+      newphrase:''
     };
   },
   methods: 
@@ -189,10 +206,19 @@ export default {
     )
   }
 });
-}
-         
+}     
 
-    },   
+    },
+    generatenewaccess:function()
+    {
+      //
+
+      this.sessioncode = this.newphrase;
+      this.$refs['modal-generateaccess'].hide()
+      this.message='You now paste your clipboard and share it via access '+this.sessioncode;
+ 
+
+    }, 
     clearclipboard:function(state)
     {
         this.title=null;
