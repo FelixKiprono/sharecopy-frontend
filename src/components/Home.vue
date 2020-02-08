@@ -8,7 +8,7 @@
         <!-- <img src="../../public/logo.png">
          -->
         <a class="navbar-brand" href="#"> <h1 class="font-weight-light">
-           Sharecopy </h1></a><span class="label label-default"><!--Share faster --> </span>
+           Sharecopy </h1></a><span class="label label-default"><font color='red'>Beta version</font></span>
         <button
           class="navbar-toggler"
           type="button"
@@ -41,18 +41,17 @@
              <!-- <a class="nav-link" href="#" v-b-modal.modal-1>Contact</a>
               -->
               <b-modal id="modal-1" title="Contact">
-                 <p>we are happy to recieve your input/feedback</p>
+                 <p></p>
              
-               <p class="my-4"> 
-                
-                 <a href="mailto:info.sharecopy@gmail.com?Subject=Sharecopy" target="_top">Mail us</a>
-                 or info.sharecopy@gmail.com
-                 </p>
-               
-               </b-modal>
-            </li>
-
-          </ul>
+                  <b-list-group-item active>we are happy to recieve your input/feedback</b-list-group-item>
+               <b-list-group>
+  <b-list-group-item href="mailto:info.sharecopy@gmail.com?Subject=Sharecopy"> 
+    info.sharecopy@gmail.com</b-list-group-item>
+  <b-list-group-item href="https://twitter.com/sharecopy">Twitter @sharecopy</b-list-group-item>
+ </b-list-group>
+</b-modal>
+</li>
+</ul>
         </div>
       </div>
     </nav>
@@ -120,7 +119,7 @@ export default {
     return {
       showDismissibleAlert: false,
       httpurl: "https://api.sharecopy.greenbyte.systems/",
-      //httpurl: "http://localhost:8000/",   
+     // httpurl: "http://localhost:8000/",   
       access: '',
       inputRules:[v=>v.length<1 || 'You have to provide access code']
     };

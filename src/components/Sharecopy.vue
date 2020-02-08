@@ -94,7 +94,7 @@ export default {
     return {
       showDismissibleAlert: true,   
      livehttpurl:'https://api.sharecopy.greenbyte.systems/',
-    // livehttpurl:'http://localhost:8000/',
+     //livehttpurl:'http://localhost:8000/',
       sessioncode:'',  
       message:'Dear user you clipboard can be accessed using this code/phrase ',   
       userid:'1',
