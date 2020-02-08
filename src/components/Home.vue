@@ -28,7 +28,7 @@
                 <span class="sr-only">(current)</span>
               </a> 
             </li> -->
-        <!--    <li class="nav-item">
+        <!--    <li class="nav-yarnitem">
                <router-link class="nav-link"
               to="/user"
               >Account</router-link>
@@ -43,7 +43,7 @@
               <b-modal id="modal-1" title="Contact">
                  <p></p>
              
-                  <b-list-group-item active>we are happy to recieve your input/feedback</b-list-group-item>
+                  <b-list-group-item active>Share your feedback</b-list-group-item>
                <b-list-group>
   <b-list-group-item href="mailto:info.sharecopy@gmail.com?Subject=Sharecopy"> 
     info.sharecopy@gmail.com</b-list-group-item>
