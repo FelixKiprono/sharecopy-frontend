@@ -60,7 +60,7 @@
     </p>
     <p class="my-4">     
     <b-form-input id="range-1" v-model="value" type="range" min="0" max="120"></b-form-input>
-    Your clipboard will be acces time will be : {{ value }} Minutes
+    Your clipboard will be access time will be : {{ value }} Minutes
    </p>
 
      <b-button block variant="primary" @click="generatenewaccess()" v-show="IsShow">Save</b-button>
@@ -103,7 +103,7 @@ export default {
       showDismissibleAlert: true,
       livehttpurl:this.$store.state.url,
       sessioncode:'',  
-      message:'Dear user you clipboard can be accessed using this code/phrase ',   
+      message:'Dear user you clipboard can be accessed using this code/phrase :',   
       userid:'1',
       title: "",
       notes:"",
@@ -180,7 +180,7 @@ export default {
        
           }else
           {
-                this.message='we found your clipboard using access '+this.sessioncode;
+                this.message='we found your clipboard using access : '+this.sessioncode;
        
           //window.console.log(response.name);
           this.notes = response.data.clipboard;
@@ -205,11 +205,7 @@ export default {
       'warning'
      );
     return;
-
       }
-
-
-
       if(this.sessioncode!=null)
       {
       //get the item access code and delete
@@ -236,8 +232,8 @@ export default {
         this.title=null;
         this.notes = null;
         this.sessioncode=null;
-        this.sessioncode =  Math.floor(Math.random() * 100000000);
-        this.message='You now paste your clipboard and share it via access '+this.sessioncode;
+        this.sessioncode =  this.generatePassword();//Math.floor(Math.random() * 100000000);
+        this.message='You now paste your clipboard and share it via access : '+this.sessioncode;
       
           window.console.log(response);          
         });
@@ -262,16 +258,25 @@ export default {
 
       this.sessioncode = this.newphrase;
       this.$refs['modal-generateaccess'].hide()
-      this.message='You now paste your clipboard and share it via access '+this.sessioncode;
+      this.message='You now paste your clipboard and share it via access : '+this.sessioncode;
  
 
     }, 
+    generatePassword:function(){
+    var length = 8,
+        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        retVal = "";
+    for (var i = 0, n = charset.length; i < length; ++i) {
+        retVal += charset.charAt(Math.floor(Math.random() * n));
+    }
+    return retVal;
+    },
     clearclipboard:function(state)
     {
         this.title=null;
         this.notes = null;
-        this.sessioncode =  Math.floor(Math.random() * 100000000);
-        this.message='You now paste your clipboard and share it via access '+this.sessioncode;
+        this.sessioncode =  this.generatePassword();//Math.floor(Math.random() * 100000000);
+        this.message='You now paste your clipboard and share it via access : '+this.sessioncode;
       
 if(state)
 {
