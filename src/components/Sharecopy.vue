@@ -55,7 +55,8 @@
      
     <p class="my-4">
      
-       <b-form-input id="input-phrase" v-on:keyup="myevent" v-model="newphrase"  placeholder="Your code/phrase"></b-form-input>
+       <b-form-input id="input-phrase"  v-model="newphrase" v-on:keyup="myevent"  placeholder="Your code/phrase"></b-form-input>
+    <!-- <b-form-input id="input-phrase" v-on:keyup="myevent" v-model="newphrase"  placeholder="Your code/phrase"></b-form-input> -->
    
     </p>
      <b-button block variant="primary" @click="generatenewaccess()" v-show="IsShow">Save</b-button>
@@ -107,6 +108,7 @@ export default {
       newphrase:'',
       value:'',
       errormsg:'',
+      msgbox:'',
       IsShow:false
     };
   },
@@ -122,7 +124,9 @@ export default {
       }
       else
       {
-     var jsonheader = { headers: { "Content-Type": "application/json" } };
+      this.errormsg = "Dear user Your new code is "+this.newphrase+" 😊";
+    this.IsShow=true;
+    /* var jsonheader = { headers: { "Content-Type": "application/json" } };
       
       this.$http
         .get(this.livehttpurl+"api/getsession", {params:{'session':this.newphrase}},jsonheader)
@@ -139,7 +143,7 @@ export default {
             this.IsShow=true;       
           }
 
-        });
+        }); */
       }
       //pass the session code to search
 
