@@ -154,6 +154,12 @@ export default {
         );
       }
     },
+    searchClipboard:function()
+    {
+      
+
+      return false;
+    },
     openSharecopy:function(state)
     {
       if(!state)
@@ -168,14 +174,20 @@ export default {
       }
       else
       {
-         this.showDismissibleAlert=false;
+        //search if there is some data with the code
+   
+      this.showDismissibleAlert=false;
       var access =
       {
         sessioncode : this.access
       }
       this.$store.state.phrase = this.access;
       this.$router.push({ path: '/clipboard/', query: {access} });
-      }   
+      }
+     
+     
+     
+     
     
    
    },

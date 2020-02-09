@@ -47,7 +47,7 @@
 </div>
   </b-col>
   <b-col lg="4" class="pb-2">
-     <b-button size="lg" variant="outline-secondary" v-b-modal.modal-generateaccess>set access phrase/code</b-button>
+     <b-button size="lg" variant="outline-secondary" v-b-modal.modal-generateaccess>Access Settings</b-button>
   </b-col>
 </b-row>
 <b-modal id="modal-generateaccess"  ref="modal-generateaccess" hide-footer centered title="Session settings">
@@ -69,9 +69,9 @@
 
 
 <div class="btn-group" role="group" aria-label="Basic example">
-  <button type="button" class="btn btn-secondary" @click="clearclipboard(true)">New</button>  
-  <button type="button" class="btn btn-primary" @click="saveclipboard()">Save</button>
-  <button type="button" disabled class="btn btn-danger" @click="deleteitem()">Destroy Session</button>  
+  <button type="button" v-show="newstate" class="btn btn-secondary" @click="clearclipboard(true)">New</button>  
+  <button type="button" v-show="savestate" class="btn btn-primary" @click="saveclipboard()">Save</button>
+  <button type="button" v-show="deletestate" class="btn btn-danger" @click="deleteitem()">Destroy Session</button>  
  </div>
 
          
@@ -113,7 +113,10 @@ export default {
       value:0,
       errormsg:'',
       msgbox:'',
-      IsShow:false
+      IsShow:false,
+      newstate:true,
+      savestate:true,
+      deletestate:false
     };
   },
   methods: 
@@ -161,7 +164,6 @@ export default {
        if(this.sessioncode==='#')
        {
          this.clearclipboard(false);
-
        }   
        else
        { 
@@ -173,19 +175,22 @@ export default {
         .then(response => 
         {
          // alert(response.data.clipboard.length);
-          if(response.data.clipboard.length===0)
+          if(!response.data.success)
           {
             this.sessioncode=null;
             this.message='Sorry we could not find anything with this code \n click New to create new clipboard.';
-       
-          }else
-          {
-                this.message='we found your clipboard using access : '+this.sessioncode;
-       
+            this.savestate=false;
+            this.deletestate=false;       
+          }
+          else
+          {          
+          this.message='we found your clipboard using access : '+this.sessioncode;   
           //window.console.log(response.name);
           this.notes = response.data.clipboard;
           this.title = response.data.title;
           this.name = response.data.name;
+          this.savestate=false;
+           this.deletestate=true;
           }
           
 
@@ -234,7 +239,9 @@ export default {
         this.sessioncode=null;
         this.sessioncode =  this.generatePassword();//Math.floor(Math.random() * 100000000);
         this.message='You now paste your clipboard and share it via access : '+this.sessioncode;
-      
+       this.savestate=true;
+       this.newstate=true;
+       this.deletestate=false;
           window.console.log(response);          
         });
   } 
@@ -277,7 +284,8 @@ export default {
         this.notes = null;
         this.sessioncode =  this.generatePassword();//Math.floor(Math.random() * 100000000);
         this.message='You now paste your clipboard and share it via access : '+this.sessioncode;
-      
+      this.savestate=true;
+      this.deletestate=false;
 if(state)
 {
       this.toastCount++;
@@ -318,8 +326,12 @@ if(state)
         .post(this.livehttpurl+"api/newclipboard", postdata,jsonheader)
         .then(response => 
         {
+
          this.makeToast('success');
           window.console.log(response);
+           this.savestate=false;
+       this.newstate=true;
+       this.deletestate=false;
         });
     }
     }
