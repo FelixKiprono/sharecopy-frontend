@@ -50,15 +50,19 @@
      <b-button size="lg" variant="outline-secondary" v-b-modal.modal-generateaccess>set access phrase/code</b-button>
   </b-col>
 </b-row>
-<b-modal id="modal-generateaccess"  ref="modal-generateaccess" hide-footer centered title="Set new access phrase/code">
+<b-modal id="modal-generateaccess"  ref="modal-generateaccess" hide-footer centered title="Session settings">
     <h3 class="font-weight-light">{{errormsg}} </h3> 
      
     <p class="my-4">
-     
-       <b-form-input id="input-phrase"  v-model="newphrase" v-on:keyup="myevent"  placeholder="Your code/phrase"></b-form-input>
+        <b-form-input id="input-phrase"  v-model="newphrase" v-on:keyup="myevent"  placeholder="Your code/phrase"></b-form-input>
     <!-- <b-form-input id="input-phrase" v-on:keyup="myevent" v-model="newphrase"  placeholder="Your code/phrase"></b-form-input> -->
    
     </p>
+    <p class="my-4">     
+    <b-form-input id="range-1" v-model="value" type="range" min="0" max="120"></b-form-input>
+    Your clipboard will be acces time will be : {{ value }} Minutes
+   </p>
+
      <b-button block variant="primary" @click="generatenewaccess()" v-show="IsShow">Save</b-button>
     
 </b-modal>
@@ -106,7 +110,7 @@ export default {
       text:'',
       status:'',
       newphrase:'',
-      value:'',
+      value:0,
       errormsg:'',
       msgbox:'',
       IsShow:false
@@ -116,7 +120,7 @@ export default {
   {
     myevent:function()
     {
-      if(this.newphrase==null)
+      if(this.newphrase==null || this.newphrase.length===0)
       {
         this.errormsg = "😪 You cannot use empty phrase ! ";
         this.IsShow=false;
@@ -124,7 +128,7 @@ export default {
       }
       else
       {
-      this.errormsg = "Dear user Your new code is "+this.newphrase+" 😊";
+      this.errormsg = "Your new code is "+this.newphrase+" 😊";
     this.IsShow=true;
     /* var jsonheader = { headers: { "Content-Type": "application/json" } };
       
