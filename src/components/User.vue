@@ -114,7 +114,7 @@ export default {
     return {
     
       //localhttpurl: "https://api.sharecopy.greenbyte.systems/",
-      localhttpurl: "http://localhost:8000/",
+      localhttpurl: this.$store.state.url,
       name: '',
       accessnumber: 0,
       email: '',
@@ -157,11 +157,16 @@ export default {
         .then(response => 
         {
          // alert('Successfully Loggedin');       
-          // window.console.log(response.data.message);      
+          // window.console.log(response.data.message);    
+          
+          //save the user id in the store global variable
+          var user = response.data.message;         
+         
+            this.$store.state.userid = user.id;
+        
     
-          var user = response.data.message;
-           this.$UserId = user.id;
-           this.$router.push({ path: '/myaccount/', query: {user} })
+          this.$UserId = user.id;
+          this.$router.push({ path: '/myaccount/', query: {user} })
         });
 
     },

@@ -28,12 +28,12 @@
                 <span class="sr-only">(current)</span>
               </a> 
             </li> -->
-        <!--    <li class="nav-yarnitem">
+            <li class="nav-yarnitem">
                <router-link class="nav-link"
               to="/user"
               >Account</router-link>
               
-            </li> -->
+            </li>
 
             <li class="nav-item">
               <b-link  class="nav-link" v-b-modal.modal-1>Contact us</b-link>
@@ -62,7 +62,7 @@
         <div class="row h-100 align-items-center">
           <div class="col-12 text-center">
             <h1 class="font-weight-light"><font color="green">Copy</font> <font color="brown">Paste</font> <font color="blue">Share</font></h1>
-            <p class="lead">Access your clipboard anywhere, anytime with any device</p>
+            <p class="lead">Access your clipboard anywhere, anytime with any device <br><b>N:B</b> if you login without account you will only have one sessions at a time</p>
   <!--          <router-link
               class="btn btn-primary btn-lg btn-block"
               to="/clipboard/0"
@@ -70,7 +70,7 @@
               Start 
           </router-link> -->
            
-            <b-button  id="start-here" v-b-tooltip.hover block variant="btn btn-primary btn-lg btn-block" @click="openSharecopy(false)">Start</b-button>
+            <b-button  id="start-here" v-b-tooltip.hover block variant="btn btn-primary btn-lg btn-block" @click="openSharecopy(false)">Start (without login)</b-button>
             <br />
             <div class="input-group mb-3">
              <input
@@ -118,7 +118,8 @@ export default {
   data() {
     return {
       showDismissibleAlert: false,
-      httpurl: "https://api.sharecopy.greenbyte.systems/",
+       livehttpurl:this.$store.state.url,
+     // httpurl: "https://api.sharecopy.greenbyte.systems/",
      // httpurl: "http://localhost:8000/",   
       access: '',
       inputRules:[v=>v.length<1 || 'You have to provide access code']
@@ -126,8 +127,8 @@ export default {
   },
   methods: {
     validate: function() {
-      if (this.access === "") {
-       
+      if (this.access === "") 
+      {      
         //  this.$bvToast.show('example-toast');
         this.message(
           "b-toaster-bottom-full danger",
@@ -142,8 +143,7 @@ export default {
       {
         this.access='#';
 
-      }
-     
+      }     
 
       if(this.access.length==0)
       {
@@ -156,6 +156,7 @@ export default {
       {
         sessioncode : this.access
       }
+      this.$store.state.phrase = this.access;
       this.$router.push({ path: '/clipboard/', query: {access} });
       }   
     

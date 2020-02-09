@@ -51,11 +51,14 @@
   </b-col>
 </b-row>
 <b-modal id="modal-generateaccess"  ref="modal-generateaccess" hide-footer centered title="Set new access phrase/code">
+    <h3 class="font-weight-light">{{errormsg}} </h3> 
+     
     <p class="my-4">
-      <i>(use a unique phrase/code)</i>
-       <b-form-input id="input-phrase" v-model="newphrase" :state="true" placeholder="Your code/phrase"></b-form-input>
+     
+       <b-form-input id="input-phrase" v-on:keyup="myevent" v-model="newphrase"  placeholder="Your code/phrase"></b-form-input>
+   
     </p>
-     <b-button block variant="primary" @click="generatenewaccess()">Save</b-button>
+     <b-button block variant="primary" @click="generatenewaccess()" v-show="IsShow">Save</b-button>
     
 </b-modal>
 
@@ -92,9 +95,8 @@ export default {
   name: "sharecopy",
   data(){
     return {
-      showDismissibleAlert: true,   
-     livehttpurl:'https://api.sharecopy.greenbyte.systems/',
-     //livehttpurl:'http://localhost:8000/',
+      showDismissibleAlert: true,
+      livehttpurl:this.$store.state.url,
       sessioncode:'',  
       message:'Dear user you clipboard can be accessed using this code/phrase ',   
       userid:'1',
@@ -102,11 +104,48 @@ export default {
       notes:"",
       text:'',
       status:'',
-      newphrase:''
+      newphrase:'',
+      value:'',
+      errormsg:'',
+      IsShow:false
     };
   },
   methods: 
   {
+    myevent:function()
+    {
+      if(this.newphrase==null)
+      {
+        this.errormsg = "😪 You cannot use empty phrase ! ";
+        this.IsShow=false;
+        return;
+      }
+      else
+      {
+     var jsonheader = { headers: { "Content-Type": "application/json" } };
+      
+      this.$http
+        .get(this.livehttpurl+"api/getsession", {params:{'session':this.newphrase}},jsonheader)
+        .then(response => 
+        {
+          if(response.data.success)
+          {
+            this.errormsg = "Already used 😪,choose another one ";
+            this.IsShow=false;
+          }
+          else
+          {
+            this.errormsg = this.newphrase+" is available 😊 ";
+            this.IsShow=true;       
+          }
+
+        });
+      }
+      //pass the session code to search
+
+      //if it exists return a message
+     
+    },    
     initfunc: function()
     {
        var accessmodel =  this.$route.query.access; 

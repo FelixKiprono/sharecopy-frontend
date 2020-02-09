@@ -205,6 +205,8 @@ export default {
     },
     initfunc: function()
     {
+      //testing the global variable
+      alert(this.$store.state.userid);
          //fetch data from the other component
       var user =  this.$route.query.user;
       this.id = user.id;

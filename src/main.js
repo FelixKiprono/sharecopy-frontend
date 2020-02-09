@@ -7,6 +7,9 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap-vue/dist/bootstrap-vue.css"
 import axios from 'axios'
 
+//vuex
+
+import store from './store/index'
 
 
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
@@ -51,6 +54,7 @@ Vue.use(VueAnalytics, {
 
 
 new Vue({
+  store,
   router:router,
   render: h => h(App),
 }).$mount('#app')
