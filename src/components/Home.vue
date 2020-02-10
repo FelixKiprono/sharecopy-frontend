@@ -22,34 +22,8 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
-           <!--  <li class="nav-item active">
-               <a class="nav-link" href="#">
-                Demo
-                <span class="sr-only">(current)</span>
-              </a> 
-            </li> -->
-           <!--  <li class="nav-yarnitem">
-               <router-link class="nav-link"
-              to="/user"
-              >Account</router-link>
-              
-            </li> -->
-              <li class="nav-item">
-              <b-link  class="nav-link" v-b-modal.modal-2>Account</b-link>
-            
-             <!-- <a class="nav-link" href="#" v-b-modal.modal-1>Contact</a>
-              -->
-              <b-modal id="modal-2" title="My account">
-                 <p>Dear visitor/future user 😊<br>This feature is currently under development 👩🏾‍💻</p>          
-                  
-              </b-modal>
-              </li>
-
             <li class="nav-item">
               <b-link  class="nav-link" v-b-modal.modal-1>Contact us</b-link>
-            
-             <!-- <a class="nav-link" href="#" v-b-modal.modal-1>Contact</a>
-              -->
               <b-modal id="modal-1" title="Contact">
                  <p></p>
              
@@ -71,15 +45,11 @@
       <div class="container h-100">
         <div class="row h-100 align-items-center">
           <div class="col-12 text-center">
-            <h1 class="font-weight-light"><font color="green">Copy</font> <font color="brown">Paste</font> <font color="blue">Share</font></h1>
-            <p class="lead">Access your clipboard anywhere, anytime with any device <br><b>N:B</b> if you start without account you will only have one sessions at a time</p>
-  <!--          <router-link
-              class="btn btn-primary btn-lg btn-block"
-              to="/clipboard/0"
-              tag="button" id="start-here" v-b-tooltip.hover>
-              Start 
-          </router-link> -->
-           
+            <h1 class="font-weight-light">
+              <font color="green">Copy</font> <font color="brown">Paste</font> <font color="blue">Share</font></h1>
+            <p class="lead">Access your clipboard anywhere, anytime with any device 
+            </p>
+         
             <b-button  id="start-here" 
             v-b-tooltip.hover block 
             variant="btn btn-primary 
@@ -90,7 +60,7 @@
              <input
                 type="text"
                 class="form-control"
-                placeholder="Your Access Phrase"
+                placeholder="Your Access phrase or code"
                 v-model="access"
               />
               <div class="input-group-append">
@@ -100,13 +70,7 @@
                  @click="openSharecopy(true)">
                    View Shared Clipboard</b-button>
                    
-    
-               <!--  <router-link 
-             class="btn btn-success btn-block"
-              :to="{path:'clipboard',query:{sessioncode:access}}"
-              tag="button" >View Shared Clipboard</router-link>  -->
-                
-              </div>
+               </div>
               
             </div>
              <b-alert v-model="showDismissibleAlert" show variant="danger">Provide access phrase/code before proceeding!</b-alert>
@@ -115,19 +79,32 @@
               id="example-toast"
               title="Sharecopy"
               static
-              no-auto-hide
-            >Provide Access Phrase Before Proceeding.</b-toast>
+              no-auto-hide>Provide Access Phrase Before Proceeding.</b-toast>
 
 
             <b-tooltip  target="start-here" triggers="hover">
     Create new clipboard,text or code by clicking this button
   </b-tooltip>
+
+           <h1 align="left" class="font-weight-light">{{sessions}} sessions shared</h1>
+  
           </div>
+          
         </div>
+
       </div>
+         
     </header>
+
+    <footer id="sticky-footer" class="py-4 bg-light text-black-50">
+    <div class="container text-center">
+    <small>Copyright &copy; 2020 Sharecopy</small>
+    </div>
+  </footer>
+
   </div>
 </template>
+
 
 <script>
 export default {
@@ -136,37 +113,48 @@ export default {
     return {
       showDismissibleAlert: false,
        livehttpurl:this.$store.state.url,
-     // httpurl: "https://api.sharecopy.greenbyte.systems/",
-     // httpurl: "http://localhost:8000/",   
-      access: '',
+       access: '',
+       sessions:0,
       inputRules:[v=>v.length<1 || 'You have to provide access code']
     };
   },
+  mounted:function(){
+
+    this.CountSession();
+  
+
+  },
   methods: {
+    CountSession:function()
+    {
+      var jsonheader = { headers: { "Content-Type": "application/json" }};
+       this.$http.get(this.livehttpurl+"api/countsessions/", jsonheader)
+        .then(response => 
+        {
+         
+             this.sessions=response.data.sessioncount;
+          
+
+         
+        });
+
+    },
     validate: function() {
       if (this.access === "") 
       {      
-        //  this.$bvToast.show('example-toast');
-        this.message(
+         this.message(
           "b-toaster-bottom-full danger",
           "Your access phrase cannot be empty",
           true
         );
       }
     },
-    searchClipboard:function()
-    {
-      
-
-      return false;
-    },
     openSharecopy:function(state)
     {
       if(!state)
       {
         this.access='#';
-
-      }     
+      }    
 
       if(this.access.length==0)
       {
@@ -174,8 +162,7 @@ export default {
       }
       else
       {
-        //search if there is some data with the code
-   
+        //search if there is some data with the code   
       this.showDismissibleAlert=false;
       var access =
       {
@@ -183,13 +170,7 @@ export default {
       }
       this.$store.state.phrase = this.access;
       this.$router.push({ path: '/clipboard/', query: {access} });
-      }
-     
-     
-     
-     
-    
-   
+      }   
    },
     message(toaster, body, append = false) {
       this.counter++;

@@ -25,10 +25,11 @@
     <div class="container">
       <div class="row">
         <div class="col-sm">
-          <div class="card">
-            <div class="card-header">New User <i>(i swear we wont spam your email)</i></div>
-            <div class="card-body">
-              <form>
+               <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4>New User</h4>
+                <hr>
+                <form>
                 <div class="form-group">
                   <label for="formGroupExampleInput1">Username</label>
                   <input
@@ -59,18 +60,32 @@
                      v-model="password"
                     placeholder="********"
                   />
+                  <label for="formGroupExampleInput3">Re-Enter password</label>
+                  <input
+                    type="password"
+                     v-model="password2"
+                    class="form-control"
+                    id="reenterpassword"                    
+                    placeholder="********"
+                  />
                 </div>
-                <button type="button" @click="SaveUser()" class="btn btn-primary">Register</button>
+                <button type="button" @click="SaveUser()" class="btn btn-primary" v-show="registerbuttonstate">Register</button>
               </form>
-            </div>
-          </div>
+              <br>
+               <div class="alert alert-danger" variant="danger" role="alert" v-show="registermsgstate">{{registermessage}}</div>
+              <div class="alert alert-success" variant="success" role="alert" v-show="registermsgstate2">{{registermessage2}}</div>
+              </div>
+</div>
+    
         </div>
 
         <div class="col-sm">
           <div class="container-fluid">
+           <!--where the error stayed-->
             <div class="panel panel-default">
               <div class="panel-heading">
                 <h4>Login</h4>
+                <hr>
 
                 <form>
                   <div class="form-group">
@@ -78,7 +93,7 @@
                     <input
                       type="text"
                       class="form-control"
-                      id="username"
+                      id="loginusername"
                       v-model="loginusername"
                       placeholder=""
                     />
@@ -89,15 +104,19 @@
                     <input
                       type="password"
                       class="form-control"
-                      id="password"
+                      id="loginpassword"
                       v-model="loginpassword"
                       placeholder=""
                     />
                   </div>
                   <button type="button" @click="Login()" class="btn btn-primary">Login</button>
                 </form>
-                 
+                <br>
+                  <div class="alert alert-danger" role="alert" v-show="loginmsgstate">  
+{{loginmessage}}
+</div>
               </div>
+              
             </div>
           </div>
         </div>
@@ -107,25 +126,39 @@
 </template>
 
 <script>
-//import MyClipboard from './MyClipboard';
 export default {
-  name: "User",
+  name: 'user',
   data() {
     return {
-    
-      //localhttpurl: "https://api.sharecopy.greenbyte.systems/",
       localhttpurl: this.$store.state.url,
-      name: '',
+      name: null,
       accessnumber: 0,
-      email: '',
+      email: null,
       password: '',
-      loginusername:'sergei',
-      loginpassword:'123456'
+      password2:'',
+      loginusername:'',
+      loginpassword:'',
+      loginmessage:'',
+      registermessage:'',registermessage2:'',
+      loginmsgstate:false,
+      registermsgstate:false,registermsgstate2:false,
+      registerbuttonstate:false,
+      //reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/
+ 
     };
   },
   methods: {
     SaveUser: function() 
     {
+      if(this.name===null)
+      {
+        this.registermessage="Cannot register with empty user information ";
+        this.registermsgstate=true;  
+         this.registermsgstate2=false;    
+
+      }
+      else
+      {
      var jsonheader = { headers: { "Content-Type": "application/json" } };
       var postdata =
       {
@@ -135,49 +168,136 @@ export default {
       }
        this.$http
         .post(this.localhttpurl+"api/adduser", postdata,jsonheader)
-        .then(response => 
+        .then(() => 
         {
-          this.makeToast();       
-          window.console.log(response);
+          this.registermessage2="Successfully registered user ";
+          this.registermsgstate2=true;  
+          this.registermsgstate=false;   
+
         });
+      }
 
 
     },
     Login:function()
     {
+      //check if  username and password is empty
+      if(this.loginusername==='' || this.loginpassword==='')
+      {
+        this.loginmessage='Cannot login with empty password or username';
+        this.loginmsgstate=true;
+      }
+      else
+      {
+        this.loginmsgstate=false;
       var jsonheader = { headers: { "Content-Type": "application/json" } };
       var postdata =
       {
         'name':this.loginusername,
-        'password':this.loginpassword
-        
+        'password':this.loginpassword        
       }
        this.$http
         .post(this.localhttpurl+"api/login", postdata,jsonheader)
         .then(response => 
         {
-         // alert('Successfully Loggedin');       
-          // window.console.log(response.data.message);    
-          
-          //save the user id in the store global variable
-          var user = response.data.message;         
-         
-            this.$store.state.userid = user.id;
-        
-    
-          this.$UserId = user.id;
-          this.$router.push({ path: '/myaccount/', query: {user} })
-        });
+           //save the user id in the store global variable         
+            var userData = 
+          {
+            id:response.data.message.id,
+            name:response.data.message.name,
+            email:response.data.message.email
+          }
 
-    },
-    makeToast(append = false) {
-      this.toastCount++;
-      this.$bvToast.toast("Successfully Added User", {
+          localStorage.setItem('id',response.data.message.id);
+          localStorage.setItem('name',response.data.message.name);
+          localStorage.setItem('email',response.data.message.email);
+          if(response.data.status)
+          {    
+       
+          this.$router.push({ path: '/myaccount/', query: {userData} });
+          }
+          else
+          {
+            //wrong username/password
+            this.loginmessage="Wrong username or password ";
+            this.loginmsgstate=true;
+
+          }
+        });
+      }
+
+    }
+    //makeToast(append = false) {
+      //this.toastCount++;
+      
+     /*this.$bvToast.toast("Successfully Added User", {
         title: "Sharecopy",
         autoHideDelay: 5000,
         appendToast: append
-      });
+      });*/
+   // }
+  },
+  watch:{
+    email:function(val)
+    {
+      var state = /\S+@\S+\.\S+/.test(val);
+     // var mailformat =/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if(!state)
+        {
+        this.registermsgstate=true;
+        this.registermessage='Your email address is invalid';   
+        
+        }
+        else
+        {
+        this.registermsgstate=false;
+        this.registermessage='';   
+
+        }
+   
+    },
+    password:function(val)
+    {
+       if(val.length<=6)
+      {             
+        //show error they are not the same
+        this.registermsgstate=true;
+        this.registermessage='Your password length is too short';
+     
+      }
+      else
+      {
+          this.registermsgstate=false;
+          this.registermessage='';
+
+      }
+
+    },   
+     password2:function(val)
+    {
+      //window.console.log('Password 1 : '+val+' Password 2 : '+this.password2);
+      if(val!=this.password)
+      {
+             
+        //show error they are not the same
+        this.registermsgstate=true;
+        this.registermessage='Your password does not match';
+        //hide the save button
+        this.registerbuttonstate=false;
+
+      }
+      else
+      {
+          this.registermsgstate=false;
+          this.registermessage='';
+        //hide the save button
+        this.registerbuttonstate=true;
+
+
+      }
     }
+
+
   }
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
 <div>
  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
-      <router-link class="navbar-brand" to="/"> {{name}} clipboard</router-link>
+      <div class="navbar-brand"> {{name}} clipboard</div>
      <br>
     
       <!--    <a class="navbar-brand" href="index.html">Home</a>
@@ -48,7 +48,9 @@
           </div>
         </div>
          <div class="form-group">
-             <b-button variant="outline-primary" @click="addclipboard">Save</b-button>
+            <b-button variant="outline-primary" @click="clearclipboard">Clear</b-button>
+             <b-button variant="outline-success" @click="addclipboard">Save</b-button>
+       
         </div>
 </div>
 
@@ -70,8 +72,22 @@
 <b-button-group size="sm" class="mt-3">
       <b-button variant="primary" @click="currentitem(clipboard)">View</b-button>   
       <b-button @click="deleteitem(clipboard)">Delete</b-button>
-      <b-button variant="primary">Share</b-button>   
+      <b-button v-b-modal.modal-share variant="primary">Share</b-button>   
 </b-button-group>
+
+<b-modal  :header-bg-variant="headerBgVariant" id="modal-share"  title="Share your clipboard" centered hide-footer>
+  Your can use this code {{fixedsharecode}} to access this clipboard
+  <p class="my-4">
+        <b-form-input id="sharecode" v-on:keyup="myevent" v-model="sharecode" placeholder="Your share code/phrase"></b-form-input>
+  </p>
+  <p class="my-4">     
+    <b-form-input id="range-1" v-model="value"  type="range" min="0" max="120"></b-form-input>
+    Your clipboard will be access time will be : {{ value }} Minutes
+   </p>
+
+     <b-button  variant="primary" @click="shareClipboard()">Share</b-button>
+    
+</b-modal>
 
 </li>
 </ul>
@@ -85,14 +101,13 @@
 import Swal from 'sweetalert2'
 
 export default {
-  name: "MyClipboard",  
-   
+  name: "myclipboard",   
   data() 
   {    
   return {
+     headerBgVariant: 'light',
      myclips:[], 
-     showDismissibleAlert: true,  
-      //localhttpurl:"https://api.sharecopy.greenbyte.systems/",  
+     showDismissibleAlert: true,   
       localhttpurl:"http://localhost:8000/",    
       notesid:'',
       id:'',     
@@ -101,39 +116,62 @@ export default {
       email:'',
       name:'',
       access:'',
+      value:60,
+      sharecode:null,
+      fixedsharecode:'GVJHBJ',
       message:'You can view your clipboard items here.'
     }
     },
   methods:{
+    logout:function()
+    {
+      //clear the cache
+      this.localStorage.removeItem('id');
+      this.localStorage.removeItem('name');
+      this.localStorage.removeItem('email');
+      //redirect to home
+      this.$router.push({ path: '/'});
+       
 
+    },
+    myevent:function()
+    {
+      this.fixedsharecode = this.sharecode;
+
+    },
     reloadClips:function(userid)
     {
-//fetch posts with this user id
+      //fetch posts with this user id
        var jsonheader = { headers: { "Content-Type": "application/json" }};
-      // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
-     /*   this.$http
-       .setHeader('Access-Control-Allow-Origin', 'http://localhost:8000');
- */
-        this.$http.get(this.localhttpurl+"api/myclipboard/",{params:{'userid':userid}}, jsonheader)
+       this.$http.get(this.localhttpurl+"api/myclipboard/",{params:{'userid':userid}}, jsonheader)
         .then(response => 
         {
-         window.console.log(response);
+       
          this.myclips = response.data;
        
         });
     },
-    LoadClips:function(userid)
-    { 
-      var jsonheader = { headers: { "Content-Type": "application/json" } };
-        this.$http
-        .get(this.localhttpurl+"api/myclipboard/",{params:{'userid':userid}}, jsonheader)
-        .then(response => 
-        {
-         window.console.log(response.data);
-       
-        });
-
+    shareClipboard:function(item)
+    {
+      var code = 'FTRG34234234';
+      var name = item.title;
+      Swal.fire({
+          title: '<strong>Share <u>'+name+'</u></strong>',
+          icon: 'info',
+          html: 'You can use <b>'+code+'</b>for this clipboard or change to',
+          input: 'text',
+          inputPlaceholder: 'Enter your access code',
+          showCloseButton: true,
+          showCancelButton: true,
+          focusConfirm: true,
+          confirmButtonText:'<i class="fa fa-thumbs-up"></i> Yes, Share!',
+          confirmButtonAriaLabel: 'Thumbs up',
+          cancelButtonText:'<i class="fa fa-thumbs-down"> Dont share</i>',
+          cancelButtonAriaLabel: 'Thumbs down'
+          })
+    
     },
+   
      currentitem:function(item)
     {
       this.title = item.title;
@@ -160,14 +198,20 @@ export default {
   if (result.value) {
     this.$http
         .post(this.localhttpurl+"api/myclipboard", postdata,jsonheader)
-        .then(response => 
-        {
-          window.console.log(response);          
+        .then(() => 
+        {        
         });
   }
 })
          
         //reload list items 
+
+    },
+    clearclipboard:function()
+    {
+      this.title=null;
+      this.notes=null;
+      this.reloadClips(this.id);
 
     },
     addclipboard:function()
@@ -186,14 +230,11 @@ export default {
       }
        this.$http
         .post(this.localhttpurl+"api/newclipboard", postdata,jsonheader)
-        .then(response => 
+        .then(() => 
         {
-
-          //Swal.fire('Successfully Added New Clipboard')
           this.message ='Successfully Added New Clipboard';
           this.showDismissibleAlert=true;
           this.reloadClips(this.id);
-          window.console.log(response);
           
         });
       }
@@ -206,16 +247,19 @@ export default {
     initfunc: function()
     {
       //testing the global variable
-      alert(this.$store.state.userid);
+      
          //fetch data from the other component
-      var user =  this.$route.query.user;
-      this.id = user.id;
-      this.email = user.email;
-      this.name = user.name;
-      this.message = 'Dear '+user.name+' welcome aboard captain, you can manage your items here.';
+      var id = localStorage.getItem('id');
+      var name = localStorage.getItem('name');
+      var email = localStorage.getItem('email');
+   
+      this.id = id;    
+      this.email = email;
+      this.name = name;
+      this.message = 'Dear '+name+' welcome aboard captain, you can manage your items here.';
 
       //fetch posts with this user id
-      this.reloadClips(user.id);          
+       this.reloadClips(this.id);          
       }
      
     },

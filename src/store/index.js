@@ -8,7 +8,7 @@ export default new Vuex.Store({
 
     state:{
        url:'https://api.sharecopy.greenbyte.systems/',
-        //url:'http://localhost:8000/',
+       // url:'http://localhost:8000/',
         phrasecode:'',
         userid:''
     },

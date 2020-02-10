@@ -24,10 +24,7 @@
           <li class="nav-item active">
             <a class="nav-link" href>
                Clipboard
-              <span class="badge badge-success">(Connected Beta 1.0)</span>
-      
-
-       </a>
+              <span class="badge badge-success">(Connected Beta 1.0)</span> </a>
           </li>
         </ul>
       </div>
@@ -232,7 +229,7 @@ export default {
   if (result.value) {
     this.$http
         .post(this.livehttpurl+"api/deleteitembycode", postdata,jsonheader)
-        .then(response => 
+        .then(() => 
         {
         this.title=null;
         this.notes = null;
@@ -241,8 +238,7 @@ export default {
         this.message='You now paste your clipboard and share it via access : '+this.sessioncode;
        this.savestate=true;
        this.newstate=true;
-       this.deletestate=false;
-          window.console.log(response);          
+       this.deletestate=false;         
         });
   } 
   else if(
@@ -273,29 +269,30 @@ export default {
     var length = 8,
         charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
         retVal = "";
-    for (var i = 0, n = charset.length; i < length; ++i) {
+    for (var i = 0, n = charset.length; i < length; ++i) 
+    {
         retVal += charset.charAt(Math.floor(Math.random() * n));
     }
     return retVal;
     },
     clearclipboard:function(state)
     {
-        this.title=null;
-        this.notes = null;
-        this.sessioncode =  this.generatePassword();//Math.floor(Math.random() * 100000000);
-        this.message='You now paste your clipboard and share it via access : '+this.sessioncode;
+      this.title=null;
+      this.notes = null;
+      this.sessioncode =  this.generatePassword();//Math.floor(Math.random() * 100000000);
+      this.message='You now paste your clipboard and share it via access : '+this.sessioncode;
       this.savestate=true;
       this.deletestate=false;
-if(state)
-{
-      this.toastCount++;
-      this.$bvToast.toast("Cleared clipboard, you can now paste.", {
-        title: "Sharecopy",
-        autoHideDelay: 5000,
-        appendToast: false,
-        variant:'primary'
-      });
-}
+      if(state)
+      {
+            this.toastCount++;
+            this.$bvToast.toast("Cleared clipboard, you can now paste.", {
+              title: "Sharecopy",
+              autoHideDelay: 5000,
+              appendToast: false,
+              variant:'primary'
+            });
+      }
 
 },
     
@@ -324,14 +321,12 @@ if(state)
       }
        this.$http
         .post(this.livehttpurl+"api/newclipboard", postdata,jsonheader)
-        .then(response => 
+        .then(() => 
         {
-
-         this.makeToast('success');
-          window.console.log(response);
-           this.savestate=false;
-       this.newstate=true;
-       this.deletestate=false;
+            this.makeToast('success');
+            this.savestate=false;
+            this.newstate=true;
+            this.deletestate=false;
         });
     }
     }
