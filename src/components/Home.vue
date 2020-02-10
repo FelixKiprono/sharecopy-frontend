@@ -114,7 +114,7 @@ export default {
       showDismissibleAlert: false,
        livehttpurl:this.$store.state.url,
        access: '',
-       sessions:0,
+       sessions:100,
       inputRules:[v=>v.length<1 || 'You have to provide access code']
     };
   },
