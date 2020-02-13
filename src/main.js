@@ -37,7 +37,21 @@ const approutes =
 [
   {path:'/',component:Home},
   {path:'/clipboard/',component:Sharecopy,props: true},
-  {path:'/user/',component:User,props: true},
+  {path:'/user/',component:User,props: true,
+  beforeEnter: (to,from,next) => 
+  {
+    if(store.loginstate)
+    {
+      next(false);  
+
+    }
+    else
+    {
+      next();
+    }
+   
+    
+}},
   {path:'/myaccount/',component:MyClipboard,props: true}
 ];
 

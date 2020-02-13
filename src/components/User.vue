@@ -4,7 +4,7 @@
   <div>
     <MyClipboard :email="email"></MyClipboard>
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow fixed-top">
-      <router-link class="navbar-brand" to="/">Account</router-link>
+      <router-link class="navbar-brand" to="/">Home</router-link>
       <!--    <a class="navbar-brand" href="index.html">Home</a>
     -->
 

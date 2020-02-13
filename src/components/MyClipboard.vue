@@ -58,10 +58,10 @@
   
   <h6 class="text-muted">My Clipboard Items</h6> 
 
-<b-input-group prepend="Search By title" class="mt-3">
-    <b-form-input></b-form-input>
+<b-input-group  prepend="Search By title" class="mt-3">
+    <b-form-input id="searchtext" v-model="searchtext"></b-form-input>
     <b-input-group-append>
-      <b-button variant="info" @click="LoadClips(9)">Search</b-button>
+      <b-button variant="info" @click="FilterItems()">Search</b-button>
     </b-input-group-append>
   </b-input-group>
   <br>
@@ -72,11 +72,15 @@
 <b-button-group size="sm" class="mt-3">
       <b-button variant="primary" @click="currentitem(clipboard)">View</b-button>   
       <b-button @click="deleteitem(clipboard)">Delete</b-button>
-      <b-button v-b-modal.modal-share variant="primary">Share</b-button>   
+      <b-button @click="shareitem(clipboard)" v-b-modal.modal-shareitem variant="primary">Share</b-button>   
 </b-button-group>
 
-<b-modal  :header-bg-variant="headerBgVariant" id="modal-share"  title="Share your clipboard" centered hide-footer>
-  Your can use this code {{fixedsharecode}} to access this clipboard
+
+
+</li>
+</ul>
+<b-modal id="modal-shareitem" ref="modal-shareitem" title="Share your clipboard" centered hide-footer>
+  {{sharemessage}} {{fixedsharecode}}
   <p class="my-4">
         <b-form-input id="sharecode" v-on:keyup="myevent" v-model="sharecode" placeholder="Your share code/phrase"></b-form-input>
   </p>
@@ -85,12 +89,9 @@
     Your clipboard will be access time will be : {{ value }} Minutes
    </p>
 
-     <b-button  variant="primary" @click="shareClipboard()">Share</b-button>
+     <b-button  variant="primary" @click="share()">Share</b-button>
     
 </b-modal>
-
-</li>
-</ul>
 </div>
 
 </div>
@@ -119,10 +120,39 @@ export default {
       value:60,
       sharecode:null,
       fixedsharecode:'GVJHBJ',
-      message:'You can view your clipboard items here.'
+      message:'You can view your clipboard items here.',
+      ShowShare:false,
+      sharemessage:'',
+      itemnotesid:'',
+      mastercopy:[],
+      searchtext:''
     }
     },
   methods:{
+    FilterItems:function()
+    {
+     var stxt=  this.searchtext;
+     var mastercopy = this.myclips;
+      let newclips = mastercopy.filter(function(item){
+        if(stxt==='' ||stxt.length===0)
+        {
+         return mastercopy;
+        }
+        else
+        {
+        return item.title===stxt;
+        }
+      });
+
+     // window.console.log('Edited Object '+newclips);
+     // window.console.log('Original Object '+this.myclips);
+
+
+     this.myclips = newclips;
+
+      
+
+    },
     logout:function()
     {
       //clear the cache
@@ -151,27 +181,34 @@ export default {
        
         });
     },
-    shareClipboard:function(item)
+    shareitem:function(item)
     {
-      var code = 'FTRG34234234';
-      var name = item.title;
-      Swal.fire({
-          title: '<strong>Share <u>'+name+'</u></strong>',
-          icon: 'info',
-          html: 'You can use <b>'+code+'</b>for this clipboard or change to',
-          input: 'text',
-          inputPlaceholder: 'Enter your access code',
-          showCloseButton: true,
-          showCancelButton: true,
-          focusConfirm: true,
-          confirmButtonText:'<i class="fa fa-thumbs-up"></i> Yes, Share!',
-          confirmButtonAriaLabel: 'Thumbs up',
-          cancelButtonText:'<i class="fa fa-thumbs-down"> Dont share</i>',
-          cancelButtonAriaLabel: 'Thumbs down'
-          })
+      //create session object
+      this.itemnotesid =  item.notesid;    
+      this.sharemessage = item.title+' will be accessed via ';
+
+    }, 
+    share:function()
+    {
+      var shareitem={
+        'notesid': this.itemnotesid,
+        'userid':this.id,
+        'access':this.fixedsharecode
+      }
+        var jsonheader = { headers: { "Content-Type": "application/json" } };     
     
-    },
-   
+       this.$http
+        .post(this.localhttpurl+"api/createsession", shareitem,jsonheader)
+        .then(() => 
+        {
+          this.message ='Successfully created sharable session via '+this.fixedsharecode;
+          this.showDismissibleAlert=true;          
+          //hide the modal
+           this.$refs['modal-shareitem'].hide()
+        });
+
+
+    },  
      currentitem:function(item)
     {
       this.title = item.title;

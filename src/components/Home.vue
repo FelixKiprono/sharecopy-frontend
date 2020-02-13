@@ -22,6 +22,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+             <router-link
+             class="nav-link"
+              to="/user">Account</router-link>
+              </li>
             <li class="nav-item">
               <b-link  class="nav-link" v-b-modal.modal-1>Contact us</b-link>
               <b-modal id="modal-1" title="Contact">
@@ -112,28 +117,30 @@ export default {
   data() {
     return {
       showDismissibleAlert: false,
-       livehttpurl:this.$store.state.url,
+       localhttpurl: this.$store.state.url,
        access: '',
-       sessions:100,
+       sessions:null,
       inputRules:[v=>v.length<1 || 'You have to provide access code']
     };
   },
-  mounted:function(){
+  created:function()
+  {
+        this.CountSession();  
 
-    this.CountSession();
-  
+
+  },
+  mounted:function(){
 
   },
   methods: {
     CountSession:function()
     {
-      var jsonheader = { headers: { "Content-Type": "application/json" }};
-       this.$http.get(this.livehttpurl+"api/countsessions/", jsonheader)
+     var jsonheader = { headers: { "Content-Type": "application/json" }};
+       this.$http.get(this.localhttpurl+"api/countsessions/",jsonheader)
         .then(response => 
         {
-         
-             this.sessions=response.data.sessioncount;
-          
+          window.console.log(response.data);         
+          this.sessions=response.data.sessioncount;      
 
          
         });
