@@ -135,12 +135,12 @@ export default {
   methods: {
     CountSession:function()
     {
-     var jsonheader = { headers: { "Content-Type": "application/json" }};
-       this.$http.get(this.localhttpurl+"api/countsessions/",jsonheader)
-        .then(response => 
+     //var jsonheader = { headers: { "Content-Type": "application/json" }};4
+       this.$http.get(this.localhttpurl+"api/countsessions/")
+           .then(response => 
         {
           window.console.log(response.data);         
-          this.sessions=response.data.sessioncount;      
+         // this.sessions=response.data.sessioncount;      
 
          
         });

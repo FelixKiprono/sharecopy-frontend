@@ -144,10 +144,6 @@ export default {
         }
       });
 
-     // window.console.log('Edited Object '+newclips);
-     // window.console.log('Original Object '+this.myclips);
-
-
      this.myclips = newclips;
 
       
@@ -303,6 +299,15 @@ export default {
   mounted()
   {
     this.initfunc();
+    
+     this.$http.get(this.localhttpurl+"api/countsessions/")
+           .then(response => 
+        {
+          window.console.log(response.data);         
+         // this.sessions=response.data.sessioncount;      
+
+         
+        });
   }
 };
 </script>

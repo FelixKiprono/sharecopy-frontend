@@ -7,12 +7,16 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap-vue/dist/bootstrap-vue.css"
 import axios from 'axios'
 
+
 //vuex
 
 import store from './store/index'
 
-
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = true;
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+
+axios.defaults.headers.common['Access-Control-Allow-Methods'] ='GET,PUT,POST,DELETE,OPTIONS';
+axios.defaults.headers.common['Access-Control-Allow-Headers'] ='Content-type,Accept,X-Access-Token,X-Key';
 
 
 import Sharecopy from './components/Sharecopy.vue'
@@ -42,12 +46,12 @@ const approutes =
   {
     if(store.loginstate)
     {
-      next(false);  
+      next();  
 
     }
     else
     {
-      next();
+      next(false);
     }
    
     

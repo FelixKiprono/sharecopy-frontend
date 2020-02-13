@@ -7,7 +7,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
 
     state:{
-       url:'https://api.sharecopy.cc/',
+      url:'https://api.sharecopy.cc/',
        //url:'http://localhost:8000/',
         phrasecode:'',
         userid:'',

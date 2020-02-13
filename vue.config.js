@@ -1,7 +1,7 @@
 module.exports={
 
-   /*  devServer:{
-        //proxy:'https://api.sharecopy.greenbyte.systems/api/'
-    } */
+     devServer:{
+        proxy:'https://api.sharecopy.cc/api/'
+    } 
    
 }
