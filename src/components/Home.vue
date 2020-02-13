@@ -22,11 +22,34 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
-              <li class="nav-item">
+            
+            <li class="nav-item">
+            <b-link  class="nav-link"            
+             v-b-modal.modal-maillist>Account</b-link>
+              <b-modal id="modal-maillist" ref="modal-maillist" title="Join our mailing list" hide-footer>
+             
+               
+                    <div class="alert alert-danger" variant="danger" role="alert" v-show="mailstatus">{{mailmsg}}</div>
+          
+                    <b-input-group  prepend="Your Email" class="mt-3">
+                    <b-form-input id="usermail" v-model="usermail"></b-form-input>
+                    <b-input-group-append>
+                      <b-button :disabled="btnstate" variant="success" @click="MailList()">Submit</b-button>
+                    </b-input-group-append>
+                    </b-input-group>
+               
+
+              </b-modal> 
+            </li>
+
+           
+              
+            
+              <!-- <li class="nav-item">
              <router-link
              class="nav-link"
               to="/user">Account</router-link>
-              </li>
+              </li> -->
             <li class="nav-item">
               <b-link  class="nav-link" v-b-modal.modal-1>Contact us</b-link>
               <b-modal id="modal-1" title="Contact">
@@ -91,8 +114,8 @@
     Create new clipboard,text or code by clicking this button
   </b-tooltip>
 
-           <h1 align="left" class="font-weight-light">{{sessions}} sessions shared</h1>
-  
+           <!-- <h1 align="left" class="font-weight-light">{{sessions}} sessions shared</h1>
+   -->
           </div>
           
         </div>
@@ -120,18 +143,13 @@ export default {
        localhttpurl: this.$store.state.url,
        access: '',
        sessions:null,
-      inputRules:[v=>v.length<1 || 'You have to provide access code']
+       usermail:'',
+       mailmsg:'',
+       mailstatus:false,
+       btnstate:true
     };
   },
-  created:function()
-  {
-        this.CountSession();  
-
-
-  },
-  mounted:function(){
-
-  },
+  
   methods: {
     CountSession:function()
     {
@@ -140,10 +158,40 @@ export default {
            .then(response => 
         {
           window.console.log(response.data);         
-         // this.sessions=response.data.sessioncount;      
+          this.sessions=response.data.sessioncount;      
 
          
         });
+
+    },
+    MailList:function()
+    {
+      if(this.usermail.length>0)
+      {
+        this.mailstatus=false;
+        this.mailmsg='';
+      var mailist={
+        'email': this.usermail      
+      }
+        var jsonheader = { headers: { "Content-Type": "application/json" } };     
+    
+       this.$http
+        .post(this.localhttpurl+"api/maillist", mailist,jsonheader)
+        .then(() => 
+        {              
+          alert('Successfully added you to sharecopy mail list, will keep you posted');    
+          //hide the modal
+          
+          
+           this.$refs['modal-maillist'].hide();
+        });
+      }
+      else
+      {
+        this.mailstatus=true;
+        this.mailmsg='Please provide a valid mail address';
+
+      }
 
     },
     validate: function() {
@@ -187,7 +235,34 @@ export default {
         solid: true,
         appendToast: append
       });
+    },
+   
+    
+  },
+  watch:{
+    usermail:function(val)
+    {
+      var state = /\S+@\S+\.\S+/.test(val);
+     // var mailformat =/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if(!state)
+        {
+        this.mailstatus=true;
+        this.mailmsg='Your email address is invalid';   
+        this.btnstate=true;
+        }
+        else
+        {
+        this.mailstatus=false;
+        this.mailmsg='';  
+        this.btnstate=false; 
+
+        }
+   
     }
+  },
+   mounted()
+  {
+   // this.CountSession();
   }
 };
 </script>
