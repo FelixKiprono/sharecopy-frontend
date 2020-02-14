@@ -151,6 +151,7 @@ export default {
     };
   },
   
+  
   methods: {
     CountSession:function()
     {
@@ -263,7 +264,8 @@ export default {
   },
    mounted()
   {
-   // this.CountSession();
+    //run sessions
+    this.CountSession();
   }
 };
 </script>
