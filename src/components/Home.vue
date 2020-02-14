@@ -45,11 +45,12 @@
            
               
             
-            <li class="nav-item">
+         <!--    <li class="nav-item">
              <router-link
              class="nav-link"
               to="/user">User</router-link>
-              </li> 
+              </li>  -->
+
             <li class="nav-item">
               <b-link  class="nav-link" v-b-modal.modal-1>Contact us</b-link>
               <b-modal id="modal-1" title="Contact">
