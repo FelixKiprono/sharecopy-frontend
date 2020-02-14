@@ -115,8 +115,8 @@
     Create new clipboard,text or code by clicking this button
   </b-tooltip>
 
-           <!-- <h1 align="left" class="font-weight-light">{{sessions}} sessions shared</h1>
-   -->
+            <h1 align="left" class="font-weight-light">{{sessions}} sessions shared</h1>
+   
           </div>
           
         </div>
@@ -159,7 +159,7 @@ export default {
            .then(response => 
         {
           window.console.log(response.data);         
-         // this.sessions=response.data.sessioncount; 
+          this.sessions=response.data.sessioncount; 
          
         });
 
