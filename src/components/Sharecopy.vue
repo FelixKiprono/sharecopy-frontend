@@ -128,8 +128,8 @@ export default {
       }
       else
       {
-      this.errormsg = "Your new code is "+this.newphrase+" 😊";
-    this.IsShow=true;
+      this.errormsg = "😊 Your new code is "+this.newphrase+" ";
+      this.IsShow=true;
     /* var jsonheader = { headers: { "Content-Type": "application/json" } };
       
       this.$http
