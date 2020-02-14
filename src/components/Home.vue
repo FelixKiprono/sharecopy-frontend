@@ -45,7 +45,7 @@
            
               
             
-         <!--    <li class="nav-item">
+         <!-- <li class="nav-item">
              <router-link
              class="nav-link"
               to="/user">User</router-link>
@@ -154,13 +154,12 @@ export default {
   methods: {
     CountSession:function()
     {
-     //var jsonheader = { headers: { "Content-Type": "application/json" }};4
-       this.$http.get(this.localhttpurl+"api/countsessions/")
+     var jsonheader = { headers: { "Content-Type": "application/json" }};4
+       this.$http.get(this.localhttpurl+"api/countsessions/",jsonheader)
            .then(response => 
         {
           window.console.log(response.data);         
-          this.sessions=response.data.sessioncount;      
-
+         // this.sessions=response.data.sessioncount; 
          
         });
 
@@ -214,6 +213,7 @@ export default {
 
       if(this.access.length==0)
       {
+        //sample
         this.showDismissibleAlert=true;
       }
       else

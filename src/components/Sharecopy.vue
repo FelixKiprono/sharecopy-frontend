@@ -171,7 +171,6 @@ export default {
         .get(this.livehttpurl+"api/mynotes", {params:{'access':this.sessioncode}},jsonheader)
         .then(response => 
         {
-         // alert(response.data.clipboard.length);
           if(!response.data.success)
           {
             this.sessioncode=null;
@@ -182,12 +181,11 @@ export default {
           else
           {          
           this.message='we found your clipboard using access : '+this.sessioncode;   
-          //window.console.log(response.name);
           this.notes = response.data.clipboard;
           this.title = response.data.title;
           this.name = response.data.name;
           this.savestate=false;
-           this.deletestate=true;
+          this.deletestate=true;
           }
           
 
