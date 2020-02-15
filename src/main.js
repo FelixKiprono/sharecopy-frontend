@@ -25,6 +25,9 @@ import User from './components/User.vue'
 import MyClipboard from './components/MyClipboard.vue'
 
 import VueAnalytics from 'vue-analytics';
+
+import VueClipboards from 'vue-clipboards';
+Vue.use(VueClipboards);
 // Configuration VueAnalytics
 
 //import VeeValidate from 'vee-validate'

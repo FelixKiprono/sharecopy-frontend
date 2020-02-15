@@ -1,7 +1,7 @@
 module.exports={
 
      devServer:{
-        proxy:'https://api.sharecopy.cc/api/'
+       // proxy:'https://api.sharecopy.cc/api/'
     } 
    
 }

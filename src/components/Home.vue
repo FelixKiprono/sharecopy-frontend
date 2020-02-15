@@ -83,25 +83,29 @@
             v-b-tooltip.hover block 
             variant="btn btn-primary 
             btn-lg btn-block" 
-            @click="openSharecopy(false)">Start (without login)</b-button>
+            @click="openSharecopy(true)">Start (without login)</b-button>
             <br />
-            <div class="input-group mb-3">
+            <b-input-group prepend="Phrasecode and password" class="mb-3">
+    <b-form-input type="text" placeholder="Phrase word" v-model="access"></b-form-input>
+    <b-form-input type="password" placeholder="Password" v-model="password"></b-form-input>
+               <div class="input-group-append">
+                 <b-button  id="view-shared" 
+                 v-b-tooltip.hover block 
+                 variant="btn btn-success" 
+                 @click="openSharecopy(false)">
+                   View Shared Clipboard</b-button>
+                   
+               </div>
+  </b-input-group>
+  <!--           <div class="input-group mb-3">
              <input
                 type="text"
                 class="form-control"
                 placeholder="Your Access phrase or code"
                 v-model="access"
-              />
-              <div class="input-group-append">
-                 <b-button  id="view-shared" 
-                 v-b-tooltip.hover block 
-                 variant="btn btn-success" 
-                 @click="openSharecopy(true)">
-                   View Shared Clipboard</b-button>
-                   
-               </div>
+              /> 
               
-            </div>
+            </div> -->
              <b-alert v-model="showDismissibleAlert" show variant="danger">Provide access phrase/code before proceeding!</b-alert>
        
             <b-toast
@@ -140,14 +144,15 @@ export default {
   name: "Home",
   data() {
     return {
-      showDismissibleAlert: false,
+       showDismissibleAlert: false,
        localhttpurl: this.$store.state.url,
        access: '',
        sessions:null,
        usermail:'',
        mailmsg:'',
        mailstatus:false,
-       btnstate:true
+       btnstate:true,
+       password:''
     };
   },
   
@@ -155,7 +160,7 @@ export default {
   methods: {
     CountSession:function()
     {
-     var jsonheader = { headers: { "Content-Type": "application/json" }};4
+     var jsonheader = { headers: { "Content-Type": "application/json" }};
        this.$http.get(this.localhttpurl+"api/countsessions/",jsonheader)
            .then(response => 
         {
@@ -181,8 +186,7 @@ export default {
         .then(() => 
         {              
           alert('Successfully added you to sharecopy mail list, will keep you posted');    
-          //hide the modal
-          
+          //hide the modal          
           
            this.$refs['modal-maillist'].hide();
         });
@@ -207,27 +211,38 @@ export default {
     },
     openSharecopy:function(state)
     {
+       localStorage.removeItem('state');
+       localStorage.removeItem('password');
+       localStorage.removeItem('phrasecode');
       if(!state)
       {
-        this.access='#';
-      }    
 
-      if(this.access.length==0)
+      if(this.access.length===0)
       {
-        //sample
+        //
         this.showDismissibleAlert=true;
       }
       else
       {
         //search if there is some data with the code   
-      this.showDismissibleAlert=false;
-      var access =
+      this.showDismissibleAlert=false;     
+     // localStorage.setItem('state',1);     
+      localStorage.setItem('password',this.password);
+      localStorage.setItem('phrasecode',this.access);
+
+      this.$store.state.IsNew=true;
+      //do a check to the serve if they have password
+      this.$router.push({ path: '/clipboard/'});
+      }  
+     
+      } 
+      else
       {
-        sessioncode : this.access
+         this.$store.state.IsNew=false;
+         localStorage.setItem('state',0);     
+         this.$router.push({ path: '/clipboard/'});
+   
       }
-      this.$store.state.phrase = this.access;
-      this.$router.push({ path: '/clipboard/', query: {access} });
-      }   
    },
     message(toaster, body, append = false) {
       this.counter++;

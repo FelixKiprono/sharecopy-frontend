@@ -22,9 +22,9 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item active">
-            <a class="nav-link" href>
+            <div class="nav-link">
                Clipboard
-              <span class="badge badge-success">(Connected Beta 1.0)</span> </a>
+              <span class="badge badge-success">(Connected Beta 1.0)</span> </div>
           </li>
         </ul>
       </div>
@@ -36,25 +36,35 @@
       <div class="panel panel-default">
         <div class="panel-heading">
 
-          <b-row>
-  <b-col lg="8" class="pb-2">
+          <!-- <b-row>
+  <b-col lg="8" class="pb-2"> -->
 <div class="alert alert-primary" role="alert">
   
 {{message}}
+
+<div class="btn-group" role="group" aria-label="Basic example">
+  <b-button size="sm" variant="outline-secondary" v-b-modal.modal-generateaccess>Change</b-button>
+  <b-button size="sm" variant="outline-secondary" @success="handleSuccess"  v-clipboard="sessioncode">Copy</b-button>
 </div>
-  </b-col>
-  <b-col lg="4" class="pb-2">
-     <b-button size="lg" variant="outline-secondary" v-b-modal.modal-generateaccess>Access Settings</b-button>
-  </b-col>
-</b-row>
+</div>
+  <!-- </b-col> -->
+ <!--  <b-col lg="4" class="pb-2">
+     <b-button size="lg" variant="outline-secondary" v-b-modal.modal-generateaccess>Change your access</b-button>
+  </b-col> -->
+<!-- </b-row> -->
 <b-modal id="modal-generateaccess"  ref="modal-generateaccess" hide-footer centered title="Session settings">
     <h3 class="font-weight-light">{{errormsg}} </h3> 
      
     <p class="my-4">
-        <b-form-input id="input-phrase"  v-model="newphrase" v-on:keyup="myevent"  placeholder="Your code/phrase"></b-form-input>
-    <!-- <b-form-input id="input-phrase" v-on:keyup="myevent" v-model="newphrase"  placeholder="Your code/phrase"></b-form-input> -->
-   
+        <b-form-input id="input-phrase"  v-model="newphrase" v-on:keyup="myevent"  placeholder="Your access phrase"></b-form-input>
+    <!-- <b-form-input id="input-phrase" v-on:keyup="myevent" v-model="newphrase"  placeholder="Your code/phrase"></b-form-input> --> 
     </p>
+
+     <p class="my-4">
+        <b-form-input  type="password" id="input-password"  v-model="password" placeholder="Your password"></b-form-input>
+    <!-- <b-form-input id="input-phrase" v-on:keyup="myevent" v-model="newphrase"  placeholder="Your code/phrase"></b-form-input> --> 
+    </p>
+
     <p class="my-4">     
     <b-form-input id="range-1" v-model="value" type="range" min="0" max="120"></b-form-input>
     Your clipboard will be access time will be : {{ value }} Minutes
@@ -76,7 +86,7 @@
         <br>
         <div class="form-group">
           <label for="title">Clipboard Title (<i>optional</i>):</label>
-          <b-form-input id="input-small" size="sm" placeholder="Enter your ttile" v-model="title"></b-form-input>
+          <b-form-input id="input-small" size="sm" placeholder="Enter your title" v-model="title"></b-form-input>
         </div>
         <div class="form-group">
           <div class="panel-body">
@@ -93,6 +103,7 @@
 
 import Swal from 'sweetalert2'
 
+
 export default {
   name: "sharecopy",
   data(){
@@ -100,13 +111,14 @@ export default {
       showDismissibleAlert: true,
       livehttpurl:this.$store.state.url,
       sessioncode:'',  
-      message:'Dear user you clipboard can be accessed using this code/phrase :',   
+      message:'',   
       userid:'1',
       title: "",
       notes:"",
       text:'',
       status:'',
       newphrase:'',
+      password:'',
       value:0,
       errormsg:'',
       msgbox:'',
@@ -116,8 +128,13 @@ export default {
       deletestate:false
     };
   },
+  
   methods: 
   {
+    handleSuccess() 
+    {
+      alert("Successfully Copied!");
+    },
     myevent:function()
     {
       if(this.newphrase==null || this.newphrase.length===0)
@@ -130,69 +147,68 @@ export default {
       {
       this.errormsg = "😊 Your new code is "+this.newphrase+" ";
       this.IsShow=true;
-    /* var jsonheader = { headers: { "Content-Type": "application/json" } };
-      
-      this.$http
-        .get(this.livehttpurl+"api/getsession", {params:{'session':this.newphrase}},jsonheader)
-        .then(response => 
-        {
-          if(response.data.success)
-          {
-            this.errormsg = "Already used 😪,choose another one ";
-            this.IsShow=false;
-          }
-          else
-          {
-            this.errormsg = this.newphrase+" is available 😊 ";
-            this.IsShow=true;       
-          }
-
-        }); */
       }
       //pass the session code to search
 
       //if it exists return a message
      
     },    
-    initfunc: function()
+    fetchnotes:function()
     {
-       var accessmodel =  this.$route.query.access; 
-       this.sessioncode = accessmodel.sessioncode;
-       if(this.sessioncode==='#')
-       {
-         this.clearclipboard(false);
-       }   
-       else
-       { 
+
+    },
+    initfunc: function()
+    {  
+     
+      var state = this.$store.state.IsNew;
+     
+      if(state)
+      {
+       
+      var sessionphrase = localStorage.getItem('phrasecode');
+      var password = localStorage.getItem('password'); 
+
       //fetch the notes associated with this code
       var jsonheader = { headers: { "Content-Type": "application/json" } };
-      
+     
+      if(password.length==0)
+      {
+        password='#';
+      }
+
       this.$http
-        .get(this.livehttpurl+"api/mynotes", {params:{'access':this.sessioncode}},jsonheader)
+        .get(this.livehttpurl+"api/mynotes", {params:{'access':sessionphrase,'password':password}},jsonheader)
         .then(response => 
         {
           if(!response.data.success)
           {
-            this.sessioncode=null;
-            this.message='Sorry we could not find anything with this code \n click New to create new clipboard.';
-            this.savestate=false;
+            this.sessioncode=this.generatePassword();
+            this.message='Paste your clipboard and share it via  '+this.sessioncode;
+            this.savestate=true;
             this.deletestate=false;       
           }
           else
           {          
-          this.message='we found your clipboard using access : '+this.sessioncode;   
+          this.message='We found your clipboard using '+this.sessioncode;   
           this.notes = response.data.clipboard;
           this.title = response.data.title;
           this.name = response.data.name;
           this.savestate=false;
           this.deletestate=true;
-          }
+          }         
+        });  
+      }
+      else
+      {
           
+            this.sessioncode=this.generatePassword();
+           this.message = 'Paste your clipboard and share it via  '+this.sessioncode;
+           this.savestate=true;
+            this.deletestate=false;  
 
-        });
-       }
-
-      //render the data to page
+      }    
+         
+       
      
     },
     deleteitem:function()
@@ -204,7 +220,7 @@ export default {
       'Your cannot destroy empty clipboard:)',
       'warning'
      );
-    return;
+       return;
       }
       if(this.sessioncode!=null)
       {
@@ -229,14 +245,16 @@ export default {
         .post(this.livehttpurl+"api/deleteitembycode", postdata,jsonheader)
         .then(() => 
         {
-        this.title=null;
+        this.title = null;
         this.notes = null;
-        this.sessioncode=null;
-        this.sessioncode =  this.generatePassword();//Math.floor(Math.random() * 100000000);
-        this.message='You now paste your clipboard and share it via access : '+this.sessioncode;
-       this.savestate=true;
-       this.newstate=true;
-       this.deletestate=false;         
+        this.sessioncode = null;
+        this.sessioncode =  this.generatePassword();
+          this.message='Paste your clipboard and share it via  '+this.sessioncode;
+         
+       /// this.message = 'You now paste your clipboard and share it via access  '+this.sessioncode;
+        this.savestate = true;
+        this.newstate = true;
+        this.deletestate = false;         
         });
   } 
   else if(
@@ -256,7 +274,6 @@ export default {
     generatenewaccess:function()
     {
       //
-
       this.sessioncode = this.newphrase;
       this.$refs['modal-generateaccess'].hide()
       this.message='You now paste your clipboard and share it via access : '+this.sessioncode;
@@ -278,8 +295,10 @@ export default {
       this.title=null;
       this.notes = null;
       this.sessioncode =  this.generatePassword();//Math.floor(Math.random() * 100000000);
-      this.message='You now paste your clipboard and share it via access : '+this.sessioncode;
-      this.savestate=true;
+     // this.message='You now paste your clipboard and share it via access   '+this.sessioncode;
+     
+       this.message='Paste your clipboard and share it via  '+this.sessioncode;
+         this.savestate=true; 
       this.deletestate=false;
       if(state)
       {
@@ -306,17 +325,16 @@ export default {
     },
     saveclipboard: function()
     {
-      if(this.notes.length>4)
-      {
-      //var accessnumber =  Math.floor(Math.random() * 100);
       var jsonheader = { headers: { "Content-Type": "application/json" } };
       var postdata =
       {
         'userid':this.userid,
         'title':this.title,
         'notes':this.notes,
-        'access':this.sessioncode
+        'access':this.sessioncode,
+        'password':this.password
       }
+      window.console.log(postdata);
        this.$http
         .post(this.livehttpurl+"api/newclipboard", postdata,jsonheader)
         .then(() => 
@@ -326,14 +344,17 @@ export default {
             this.newstate=true;
             this.deletestate=false;
         });
-    }
+    
     }
   
     
   },
   mounted()
   {
+    this.sessioncode =  this.generatePassword();
+   
     this.initfunc();
+  
   }
 };
 </script>
